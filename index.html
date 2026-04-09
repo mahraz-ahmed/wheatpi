@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wheatstone Alliance — Lab Dashboard</title>
+    <meta name="description" content="Live dashboard for the Wheatstone Alliance electronics lab.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="dashboard" id="dashboard">
+
+        <!-- ─── TOP BAR ─── -->
+        <header class="topbar" id="topbar">
+            <div class="topbar-left">
+                <img src="assets/wheatstone_logo.png" alt="Wheatstone Alliance" class="logo" id="logo">
+            </div>
+            <div class="topbar-right">
+                <div class="weather" id="weather">
+                    <span class="weather-icon" id="weather-icon">—</span>
+                    <span class="weather-temp" id="weather-temp">—</span>
+                    <span class="weather-desc" id="weather-desc"></span>
+                </div>
+                <div class="clock-group">
+                    <time class="clock" id="clock">00:00</time>
+                    <span class="clock-date" id="clock-date">Sunday, 5 April 2026</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ─── MAIN CONTENT ─── -->
+        <main class="grid">
+
+            <!-- LEFT: Printers + Events -->
+            <section class="col col-left">
+
+                <!-- 3D Printer Status -->
+                <div class="card printers-card" id="printers-section">
+                    <div class="card-label">3D Printers</div>
+                    <div class="printer-grid" id="printer-grid">
+                        <!-- JS populated -->
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div class="card events-card" id="events-section">
+                    <div class="card-label">Upcoming</div>
+                    <ul class="events-list" id="events-list">
+                        <!-- JS populated -->
+                    </ul>
+                </div>
+
+            </section>
+
+            <!-- RIGHT: Project Spotlight -->
+            <section class="col col-right">
+                <div class="card spotlight-card" id="spotlight-section">
+                    <div class="card-label">Project Spotlight</div>
+                    <div class="spotlight-stage" id="spotlight-stage">
+                        <img class="spotlight-img active" src="assets/project_robot.png" alt="Olympus Rover" id="spotlight-img">
+                        <div class="spotlight-caption" id="spotlight-caption">
+                            <span class="spotlight-title" id="spotlight-title">Olympus Rover</span>
+                            <span class="spotlight-team" id="spotlight-team">Robotics Division</span>
+                        </div>
+                        <div class="spotlight-dots" id="spotlight-dots"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ─── SAFETY STRIP ─── -->
+        <footer class="safety-strip" id="safety-strip">
+            <div class="safety-icon">⊘</div>
+            <div class="safety-text">
+                NO FOOD OR DRINK (INCLUDING WATER) — KEEP SPACE CLEAN — VIOLATIONS RISK A BAN
+            </div>
+            <div class="safety-icon">⊘</div>
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
