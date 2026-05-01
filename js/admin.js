@@ -443,8 +443,8 @@
       const item = document.createElement("div");
       item.className = "headline-item";
       const displayName =
-        event.name.length > 40
-          ? event.name.substring(0, 37) + "..."
+        event.name.length > 32
+          ? event.name.substring(0, 29) + "..."
           : event.name;
 
       item.innerHTML = `
@@ -476,7 +476,7 @@
     const captionInput = document.getElementById("new-event-caption");
     const linkInput = document.getElementById("new-event-link");
 
-    const name = nameInput.value.trim().substring(0, 40);
+    const name = nameInput.value.trim().substring(0, 32);
     const date = dateInput.value;
     const time = timeInput.value.trim();
     const caption = captionInput.value.trim().substring(0, 30);
