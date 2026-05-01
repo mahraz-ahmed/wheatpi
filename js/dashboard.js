@@ -160,7 +160,9 @@
 
   async function loadData() {
     try {
-      const res = await fetch("/api/data?t=" + new Date().getTime(), { cache: "no-store" });
+      const res = await fetch("/api/data?t=" + new Date().getTime(), {
+        cache: "no-store",
+      });
       if (res.ok) {
         remoteData = await res.json();
       } else {
@@ -431,8 +433,8 @@
           const qr = new QRious({
             value: event.link,
             size: 100,
-            background: 'white',
-            foreground: 'black'
+            background: "white",
+            foreground: "black",
           });
           const qrUrl = qr.toDataURL();
           qrHtml = `
@@ -445,7 +447,10 @@
         }
       }
 
-      const displayName = event.name.length > 42 ? event.name.substring(0, 39) + "..." : event.name;
+      const displayName =
+        event.name.length > 40
+          ? event.name.substring(0, 37) + "..."
+          : event.name;
 
       item.innerHTML = `
         <div class="event-date-badge">

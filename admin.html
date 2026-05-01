@@ -1,245 +1,502 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel — Wheatstone Dashboard</title>
-  <meta name="description" content="Admin panel for managing the Wheatstone Makerspace dashboard content.">
-  <link rel="stylesheet" href="css/style.css">
-  <style>
-    html, body { overflow: auto; height: auto; }
-  </style>
-</head>
-<body class="admin-page">
-  <!-- ===== LOGIN SECTION ===== -->
-  <div id="login-section">
-    <div class="login-container">
-      <div class="login-card">
-        <div class="login-logo">
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="56" height="56">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel — Wheatstone Dashboard</title>
+    <meta
+      name="description"
+      content="Admin panel for managing the Wheatstone Makerspace dashboard content."
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      html,
+      body {
+        overflow: auto;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body class="admin-page">
+    <!-- ===== LOGIN SECTION ===== -->
+    <div id="login-section">
+      <div class="login-container">
+        <div class="login-card">
+          <div class="login-logo">
+            <svg
+              viewBox="0 0 100 100"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              width="56"
+              height="56"
+            >
+              <g transform="translate(50,50)">
+                <circle cx="0" cy="0" r="12" fill="#a0a0b8" />
+                <rect
+                  x="-8"
+                  y="-38"
+                  width="16"
+                  height="16"
+                  rx="2"
+                  fill="#f0f0f5"
+                />
+                <rect
+                  x="22"
+                  y="-8"
+                  width="16"
+                  height="16"
+                  rx="2"
+                  fill="#f0f0f5"
+                />
+                <rect
+                  x="-8"
+                  y="22"
+                  width="16"
+                  height="16"
+                  rx="2"
+                  fill="#f0f0f5"
+                />
+                <rect
+                  x="-38"
+                  y="-8"
+                  width="16"
+                  height="16"
+                  rx="2"
+                  fill="#f0f0f5"
+                />
+                <rect
+                  x="-6"
+                  y="-6"
+                  width="12"
+                  height="12"
+                  rx="2"
+                  fill="#a0a0b8"
+                  transform="translate(25,-25) rotate(45)"
+                />
+                <rect
+                  x="-6"
+                  y="-6"
+                  width="12"
+                  height="12"
+                  rx="2"
+                  fill="#a0a0b8"
+                  transform="translate(25,25) rotate(45)"
+                />
+                <rect
+                  x="-6"
+                  y="-6"
+                  width="12"
+                  height="12"
+                  rx="2"
+                  fill="#a0a0b8"
+                  transform="translate(-25,25) rotate(45)"
+                />
+                <rect
+                  x="-6"
+                  y="-6"
+                  width="12"
+                  height="12"
+                  rx="2"
+                  fill="#a0a0b8"
+                  transform="translate(-25,-25) rotate(45)"
+                />
+              </g>
+            </svg>
+            <h1>Wheatstone Dashboard</h1>
+            <p>Admin Panel</p>
+          </div>
+          <form id="login-form">
+            <div class="form-group">
+              <label for="login-username">Username</label>
+              <input
+                type="text"
+                id="login-username"
+                placeholder="Enter username"
+                autocomplete="username"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input
+                type="password"
+                id="login-password"
+                placeholder="Enter password"
+                autocomplete="current-password"
+                required
+              />
+            </div>
+            <div class="login-error" id="login-error">Invalid credentials</div>
+            <button type="submit" class="btn btn-primary">Sign In</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== ADMIN DASHBOARD ===== -->
+    <div id="admin-dashboard" class="admin-dashboard">
+      <!-- Admin Header -->
+      <header class="admin-header">
+        <div class="admin-header-left">
+          <svg
+            viewBox="0 0 100 100"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <g transform="translate(50,50)">
-              <circle cx="0" cy="0" r="12" fill="#a0a0b8"/>
-              <rect x="-8" y="-38" width="16" height="16" rx="2" fill="#f0f0f5"/>
-              <rect x="22" y="-8" width="16" height="16" rx="2" fill="#f0f0f5"/>
-              <rect x="-8" y="22" width="16" height="16" rx="2" fill="#f0f0f5"/>
-              <rect x="-38" y="-8" width="16" height="16" rx="2" fill="#f0f0f5"/>
-              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(25,-25) rotate(45)"/>
-              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(25,25) rotate(45)"/>
-              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(-25,25) rotate(45)"/>
-              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(-25,-25) rotate(45)"/>
+              <circle cx="0" cy="0" r="12" fill="#a0a0b8" />
+              <rect
+                x="-8"
+                y="-38"
+                width="16"
+                height="16"
+                rx="2"
+                fill="#f0f0f5"
+              />
+              <rect
+                x="22"
+                y="-8"
+                width="16"
+                height="16"
+                rx="2"
+                fill="#f0f0f5"
+              />
+              <rect
+                x="-8"
+                y="22"
+                width="16"
+                height="16"
+                rx="2"
+                fill="#f0f0f5"
+              />
+              <rect
+                x="-38"
+                y="-8"
+                width="16"
+                height="16"
+                rx="2"
+                fill="#f0f0f5"
+              />
+              <rect
+                x="-6"
+                y="-6"
+                width="12"
+                height="12"
+                rx="2"
+                fill="#a0a0b8"
+                transform="translate(25,-25) rotate(45)"
+              />
+              <rect
+                x="-6"
+                y="-6"
+                width="12"
+                height="12"
+                rx="2"
+                fill="#a0a0b8"
+                transform="translate(25,25) rotate(45)"
+              />
+              <rect
+                x="-6"
+                y="-6"
+                width="12"
+                height="12"
+                rx="2"
+                fill="#a0a0b8"
+                transform="translate(-25,25) rotate(45)"
+              />
+              <rect
+                x="-6"
+                y="-6"
+                width="12"
+                height="12"
+                rx="2"
+                fill="#a0a0b8"
+                transform="translate(-25,-25) rotate(45)"
+              />
             </g>
           </svg>
-          <h1>Wheatstone Dashboard</h1>
-          <p>Admin Panel</p>
+          <h1>Dashboard Admin</h1>
         </div>
-        <form id="login-form">
-          <div class="form-group">
-            <label for="login-username">Username</label>
-            <input type="text" id="login-username" placeholder="Enter username" autocomplete="username" required>
+        <div class="admin-header-right">
+          <nav class="admin-nav">
+            <button
+              class="admin-nav-btn active"
+              data-section="section-carousel"
+            >
+              Carousel
+            </button>
+            <button class="admin-nav-btn" data-section="section-status">
+              Status
+            </button>
+            <button class="admin-nav-btn" data-section="section-events">
+              Events
+            </button>
+            <button class="admin-nav-btn" data-section="section-settings">
+              Settings
+            </button>
+          </nav>
+          <button class="btn btn-secondary btn-sm" id="view-dashboard-btn">
+            ↗ View Dashboard
+          </button>
+          <button class="btn btn-danger btn-sm" id="logout-btn">Logout</button>
+        </div>
+      </header>
+
+      <!-- Admin Content -->
+      <div class="admin-content">
+        <!-- ===== CAROUSEL SECTION ===== -->
+        <div id="section-carousel" class="admin-section active">
+          <h2 class="section-title">Carousel Slides</h2>
+          <p class="section-desc">
+            Manage the images displayed in the dashboard slideshow.
+          </p>
+
+          <div class="admin-card">
+            <div class="card-header">
+              <h3>Current Slides</h3>
+            </div>
+            <div id="slides-list"></div>
           </div>
-          <div class="form-group">
-            <label for="login-password">Password</label>
-            <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password" required>
+
+          <div class="admin-card">
+            <div class="card-header">
+              <h3>Add New Slide</h3>
+            </div>
+            <div class="add-form" id="slide-add-form">
+              <div class="dropzone-area" id="slide-dropzone">
+                <span>Drag & Drop an image here or click to select</span>
+                <input
+                  type="file"
+                  id="new-slide-file"
+                  accept="image/*"
+                  style="display: none"
+                />
+              </div>
+              <div class="form-group" style="margin-top: 16px">
+                <label for="new-slide-url">Or Image URL</label>
+                <input
+                  type="url"
+                  id="new-slide-url"
+                  placeholder="https://example.com/image.jpg"
+                />
+                <img
+                  class="image-preview"
+                  id="slide-preview-img"
+                  alt="Preview"
+                />
+              </div>
+              <div class="form-group">
+                <label for="new-slide-caption">Caption (optional)</label>
+                <input
+                  type="text"
+                  id="new-slide-caption"
+                  placeholder="Describe this slide..."
+                />
+              </div>
+              <button
+                class="btn btn-primary"
+                id="add-slide-btn"
+                style="margin-top: 8px"
+              >
+                Add Slide
+              </button>
+            </div>
           </div>
-          <div class="login-error" id="login-error">Invalid credentials</div>
-          <button type="submit" class="btn btn-primary">Sign In</button>
-        </form>
+        </div>
+
+        <!-- ===== STATUS UPDATES SECTION ===== -->
+        <div id="section-status" class="admin-section">
+          <h2 class="section-title">Status Updates</h2>
+          <p class="section-desc">
+            Messages that cycle in the side panel of the dashboard.
+          </p>
+
+          <div class="admin-card">
+            <div class="card-header">
+              <h3>BBC News Feed</h3>
+            </div>
+            <div class="toggle-row">
+              <div>
+                <div class="toggle-label">Enable BBC News</div>
+                <div class="toggle-desc">
+                  Show live BBC News summaries in the ticker
+                </div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="bbc-toggle" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="card-header">
+              <h3>Custom Status Messages</h3>
+            </div>
+            <div id="headlines-list"></div>
+            <div class="add-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="new-headline">New Status Message</label>
+                  <input
+                    type="text"
+                    id="new-headline"
+                    placeholder="Enter a status update..."
+                  />
+                </div>
+                <button
+                  class="btn btn-primary btn-sm"
+                  id="add-headline-btn"
+                  style="
+                    white-space: nowrap;
+                    height: 44px;
+                    margin-bottom: 0;
+                    width: auto;
+                  "
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== EVENTS SECTION ===== -->
+        <div id="section-events" class="admin-section">
+          <h2 class="section-title">Upcoming Events</h2>
+          <p class="section-desc">
+            Events shown in the side panel. Past events are automatically hidden
+            on the dashboard.
+          </p>
+
+          <div class="admin-card">
+            <div class="card-header">
+              <h3>Current Events</h3>
+            </div>
+            <div id="events-list-admin"></div>
+          </div>
+
+          <div class="admin-card">
+            <div class="card-header">
+              <h3>Add New Event</h3>
+            </div>
+            <div class="add-form">
+              <div class="form-group">
+                <label for="new-event-name">Event Name (Max 40 chars)</label>
+                <input
+                  type="text"
+                  id="new-event-name"
+                  placeholder="e.g. Soldering Workshop"
+                  maxlength="40"
+                />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="new-event-date">Date</label>
+                  <input type="date" id="new-event-date" />
+                </div>
+                <div class="form-group">
+                  <label for="new-event-time">Time (optional)</label>
+                  <input
+                    type="text"
+                    id="new-event-time"
+                    placeholder="e.g. 14:00 – 16:00"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="new-event-caption">Caption (optional, Max 30 chars)</label>
+                <input
+                  type="text"
+                  id="new-event-caption"
+                  placeholder="Short description for the event"
+                  maxlength="30"
+                />
+              </div>
+              <div class="form-group">
+                <label for="new-event-link"
+                  >Event Link (optional for QR Code)</label
+                >
+                <input
+                  type="url"
+                  id="new-event-link"
+                  placeholder="https://..."
+                />
+              </div>
+              <button
+                class="btn btn-primary"
+                id="add-event-btn"
+                style="margin-top: 8px"
+              >
+                Add Event
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== SETTINGS SECTION ===== -->
+        <div id="section-settings" class="admin-section">
+          <h2 class="section-title">Settings</h2>
+          <p class="section-desc">
+            Configure dashboard behaviour and admin credentials.
+          </p>
+
+          <div class="admin-card">
+            <div class="card-header">
+              <h3>Admin Credentials</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label for="settings-username">Username</label>
+                <input type="text" id="settings-username" placeholder="admin" />
+              </div>
+              <div class="form-group" style="margin-bottom: 0">
+                <label for="settings-password">New Password</label>
+                <input
+                  type="password"
+                  id="settings-password"
+                  placeholder="Leave blank to keep current"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="card-header">
+              <h3>Carousel Settings</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group" style="margin-bottom: 0">
+                <label for="settings-interval"
+                  >Auto-advance interval (seconds)</label
+                >
+                <input
+                  type="number"
+                  id="settings-interval"
+                  min="1"
+                  max="120"
+                  value="5"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px; margin-top: 8px">
+            <button
+              class="btn btn-primary"
+              id="save-settings-btn"
+              style="flex: 1"
+            >
+              Save Settings
+            </button>
+            <button class="btn btn-danger" id="reset-all-btn">
+              Reset All to Defaults
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- ===== ADMIN DASHBOARD ===== -->
-  <div id="admin-dashboard" class="admin-dashboard">
-    <!-- Admin Header -->
-    <header class="admin-header">
-      <div class="admin-header-left">
-        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(50,50)">
-            <circle cx="0" cy="0" r="12" fill="#a0a0b8"/>
-            <rect x="-8" y="-38" width="16" height="16" rx="2" fill="#f0f0f5"/>
-            <rect x="22" y="-8" width="16" height="16" rx="2" fill="#f0f0f5"/>
-            <rect x="-8" y="22" width="16" height="16" rx="2" fill="#f0f0f5"/>
-            <rect x="-38" y="-8" width="16" height="16" rx="2" fill="#f0f0f5"/>
-            <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(25,-25) rotate(45)"/>
-            <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(25,25) rotate(45)"/>
-            <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(-25,25) rotate(45)"/>
-            <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(-25,-25) rotate(45)"/>
-          </g>
-        </svg>
-        <h1>Dashboard Admin</h1>
-      </div>
-      <div class="admin-header-right">
-        <nav class="admin-nav">
-          <button class="admin-nav-btn active" data-section="section-carousel">Carousel</button>
-          <button class="admin-nav-btn" data-section="section-status">Status</button>
-          <button class="admin-nav-btn" data-section="section-events">Events</button>
-          <button class="admin-nav-btn" data-section="section-settings">Settings</button>
-        </nav>
-        <button class="btn btn-secondary btn-sm" id="view-dashboard-btn">↗ View Dashboard</button>
-        <button class="btn btn-danger btn-sm" id="logout-btn">Logout</button>
-      </div>
-    </header>
-
-    <!-- Admin Content -->
-    <div class="admin-content">
-      <!-- ===== CAROUSEL SECTION ===== -->
-      <div id="section-carousel" class="admin-section active">
-        <h2 class="section-title">Carousel Slides</h2>
-        <p class="section-desc">Manage the images displayed in the dashboard slideshow.</p>
-
-        <div class="admin-card">
-          <div class="card-header">
-            <h3>Current Slides</h3>
-          </div>
-          <div id="slides-list"></div>
-        </div>
-
-        <div class="admin-card">
-          <div class="card-header">
-            <h3>Add New Slide</h3>
-          </div>
-          <div class="add-form" id="slide-add-form">
-            <div class="dropzone-area" id="slide-dropzone">
-              <span>Drag & Drop an image here or click to select</span>
-              <input type="file" id="new-slide-file" accept="image/*" style="display:none">
-            </div>
-            <div class="form-group" style="margin-top: 16px;">
-              <label for="new-slide-url">Or Image URL</label>
-              <input type="url" id="new-slide-url" placeholder="https://example.com/image.jpg">
-              <img class="image-preview" id="slide-preview-img" alt="Preview">
-            </div>
-            <div class="form-group">
-              <label for="new-slide-caption">Caption (optional)</label>
-              <input type="text" id="new-slide-caption" placeholder="Describe this slide...">
-            </div>
-            <button class="btn btn-primary" id="add-slide-btn" style="margin-top:8px">Add Slide</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== STATUS UPDATES SECTION ===== -->
-      <div id="section-status" class="admin-section">
-        <h2 class="section-title">Status Updates</h2>
-        <p class="section-desc">Messages that cycle in the side panel of the dashboard.</p>
-
-        <div class="admin-card">
-          <div class="card-header">
-            <h3>BBC News Feed</h3>
-          </div>
-          <div class="toggle-row">
-            <div>
-              <div class="toggle-label">Enable BBC News</div>
-              <div class="toggle-desc">Show live BBC News summaries in the ticker</div>
-            </div>
-            <label class="toggle-switch">
-              <input type="checkbox" id="bbc-toggle" checked>
-              <span class="toggle-slider"></span>
-            </label>
-          </div>
-        </div>
-
-        <div class="admin-card">
-          <div class="card-header">
-            <h3>Custom Status Messages</h3>
-          </div>
-          <div id="headlines-list"></div>
-          <div class="add-form">
-            <div class="form-row">
-              <div class="form-group">
-                <label for="new-headline">New Status Message</label>
-                <input type="text" id="new-headline" placeholder="Enter a status update...">
-              </div>
-              <button class="btn btn-primary btn-sm" id="add-headline-btn" style="white-space:nowrap;height:44px;margin-bottom:0;width:auto;">Add</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== EVENTS SECTION ===== -->
-      <div id="section-events" class="admin-section">
-        <h2 class="section-title">Upcoming Events</h2>
-        <p class="section-desc">Events shown in the side panel. Past events are automatically hidden on the dashboard.</p>
-
-        <div class="admin-card">
-          <div class="card-header">
-            <h3>Current Events</h3>
-          </div>
-          <div id="events-list-admin"></div>
-        </div>
-
-        <div class="admin-card">
-          <div class="card-header">
-            <h3>Add New Event</h3>
-          </div>
-          <div class="add-form">
-            <div class="form-group">
-              <label for="new-event-name">Event Name</label>
-              <input type="text" id="new-event-name" placeholder="e.g. Soldering Workshop" maxlength="42">
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label for="new-event-date">Date</label>
-                <input type="date" id="new-event-date">
-              </div>
-              <div class="form-group">
-                <label for="new-event-time">Time (optional)</label>
-                <input type="text" id="new-event-time" placeholder="e.g. 14:00 – 16:00">
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="new-event-caption">Caption (optional)</label>
-              <input type="text" id="new-event-caption" placeholder="Short description for the event">
-            </div>
-            <div class="form-group">
-              <label for="new-event-link">Event Link (optional for QR Code)</label>
-              <input type="url" id="new-event-link" placeholder="https://...">
-            </div>
-            <button class="btn btn-primary" id="add-event-btn" style="margin-top:8px">Add Event</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== SETTINGS SECTION ===== -->
-      <div id="section-settings" class="admin-section">
-        <h2 class="section-title">Settings</h2>
-        <p class="section-desc">Configure dashboard behaviour and admin credentials.</p>
-
-        <div class="admin-card">
-          <div class="card-header">
-            <h3>Admin Credentials</h3>
-          </div>
-          <div class="card-body">
-            <div class="form-group">
-              <label for="settings-username">Username</label>
-              <input type="text" id="settings-username" placeholder="admin">
-            </div>
-            <div class="form-group" style="margin-bottom:0">
-              <label for="settings-password">New Password</label>
-              <input type="password" id="settings-password" placeholder="Leave blank to keep current">
-            </div>
-          </div>
-        </div>
-
-        <div class="admin-card">
-          <div class="card-header">
-            <h3>Carousel Settings</h3>
-          </div>
-          <div class="card-body">
-            <div class="form-group" style="margin-bottom:0">
-              <label for="settings-interval">Auto-advance interval (seconds)</label>
-              <input type="number" id="settings-interval" min="1" max="120" value="5">
-            </div>
-          </div>
-        </div>
-
-        <div style="display:flex;gap:12px;margin-top:8px">
-          <button class="btn btn-primary" id="save-settings-btn" style="flex:1">Save Settings</button>
-          <button class="btn btn-danger" id="reset-all-btn">Reset All to Defaults</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="js/admin.js"></script>
-</body>
+    <script src="js/admin.js"></script>
+  </body>
 </html>

@@ -73,7 +73,9 @@
   // ---- Storage helpers ----
   async function loadRemoteData() {
     try {
-      const res = await fetch("/api/data?t=" + new Date().getTime(), { cache: "no-store" });
+      const res = await fetch("/api/data?t=" + new Date().getTime(), {
+        cache: "no-store",
+      });
       if (res.ok) {
         remoteData = await res.json();
       } else {
@@ -424,7 +426,10 @@
       const dateStr = `${d.getDate()} ${MONTH_SHORT[d.getMonth()]} ${d.getFullYear()}`;
       const item = document.createElement("div");
       item.className = "headline-item";
-      const displayName = event.name.length > 42 ? event.name.substring(0, 39) + "..." : event.name;
+      const displayName =
+        event.name.length > 40
+          ? event.name.substring(0, 37) + "..."
+          : event.name;
 
       item.innerHTML = `
         <span class="headline-text">
@@ -455,10 +460,10 @@
     const captionInput = document.getElementById("new-event-caption");
     const linkInput = document.getElementById("new-event-link");
 
-    const name = nameInput.value.trim().substring(0, 42);
+    const name = nameInput.value.trim().substring(0, 40);
     const date = dateInput.value;
     const time = timeInput.value.trim();
-    const caption = captionInput.value.trim();
+    const caption = captionInput.value.trim().substring(0, 30);
     const link = linkInput.value.trim();
 
     if (!name || !date) {
@@ -658,6 +663,8 @@
     // View dashboard link
     const viewDashBtn = document.getElementById("view-dashboard-btn");
     if (viewDashBtn)
-      viewDashBtn.addEventListener("click", () => window.open("https://wheatpi.vercel.app", "_blank"));
+      viewDashBtn.addEventListener("click", () =>
+        window.open("https://wheatpi.vercel.app", "_blank"),
+      );
   });
 })();

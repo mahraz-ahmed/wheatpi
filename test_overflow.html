@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="width: 350px; background: #000;">
+  <div class="status-panel">
+    <div class="status-content">
+      <div class="status-message" id="status-test"></div>
+    </div>
+  </div>
+  <div class="event-item">
+    <div class="event-date-badge"></div>
+    <div class="event-details">
+      <div class="event-name">WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW</div>
+      <div class="event-caption" id="caption-test"></div>
+    </div>
+    <div class="event-qr"></div>
+  </div>
+  <script>
+    const statusTest = document.getElementById("status-test");
+    statusTest.innerHTML = "W".repeat(70);
+    
+    const captionTest = document.getElementById("caption-test");
+    captionTest.innerHTML = "W".repeat(30);
+  </script>
+</body>
+</html>
