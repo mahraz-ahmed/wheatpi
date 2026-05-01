@@ -263,12 +263,21 @@
               <h3>Add New Slide</h3>
             </div>
             <div class="add-form" id="slide-add-form">
-              <div class="form-group">
-                <label for="new-slide-url">Google Drive Image Link</label>
+              <div class="dropzone-area" id="slide-dropzone">
+                <span>Drag & Drop an image here or click to select</span>
+                <input
+                  type="file"
+                  id="new-slide-file"
+                  accept="image/*"
+                  style="display: none"
+                />
+              </div>
+              <div class="form-group" style="margin-top: 16px">
+                <label for="new-slide-url">Or Image URL</label>
                 <input
                   type="url"
                   id="new-slide-url"
-                  placeholder="https://drive.google.com/file/d/..."
+                  placeholder="https://example.com/image.jpg"
                 />
                 <img
                   class="image-preview"
@@ -482,7 +491,30 @@
             </div>
           </div>
 
-
+          <div class="admin-card">
+            <div class="card-header">
+              <h3>Cloudinary Storage (Required for Uploads)</h3>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Configure Cloudinary for high-quality image uploads without hitting database limits.</p>
+              <div class="form-group">
+                <label for="settings-cloudinary-cloud">Cloud Name</label>
+                <input
+                  type="text"
+                  id="settings-cloudinary-cloud"
+                  placeholder="e.g. dxxxxxxxx"
+                />
+              </div>
+              <div class="form-group" style="margin-bottom: 0">
+                <label for="settings-cloudinary-preset">Upload Preset (Unsigned)</label>
+                <input
+                  type="text"
+                  id="settings-cloudinary-preset"
+                  placeholder="e.g. dashboard_uploads"
+                />
+              </div>
+            </div>
+          </div>
 
           <div style="display: flex; gap: 12px; margin-top: 8px">
             <button
