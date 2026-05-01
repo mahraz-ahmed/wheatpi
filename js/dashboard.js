@@ -451,8 +451,8 @@
       }
 
       const displayName =
-        event.name.length > 40
-          ? event.name.substring(0, 37) + "..."
+        event.name.length > 46
+          ? event.name.substring(0, 43) + "..."
           : event.name;
 
       item.innerHTML = `
