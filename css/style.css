@@ -68,10 +68,10 @@ html, body {
 .header-brand { 
   width: var(--side-panel-width); 
   height: 100%;
-  padding-left: 20px; 
+  padding-left: 16px; 
   display: flex; 
   align-items: center; 
-  gap: 12px; 
+  gap: 10px; 
   flex-shrink: 0;
   border-right: 1px solid var(--border-primary);
 }
@@ -80,6 +80,13 @@ html, body {
   align-items: center; 
   gap: 40px; 
   padding-left: 40px;
+}
+
+.kcl-logo {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .logo-container {
@@ -116,8 +123,8 @@ html, body {
 
 .header-right { display: flex; align-items: center; gap: 16px; }
 .lab-info { text-align: left; }
-.lab-name { font-size: 0.9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-.lab-location { font-size: 0.7rem; color: var(--text-secondary); font-weight: 500; }
+.lab-name { font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+.lab-location { font-size: 0.65rem; color: var(--text-secondary); font-weight: 500; }
 
 /* Main Content Area */
 .main-content {
