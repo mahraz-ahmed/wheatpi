@@ -22,14 +22,14 @@
       'Need help? Ask a Wheatstone Alliance committee member'
     ],
     events: [
-      { name: 'Intro to Soldering Workshop', date: '2026-05-08', time: '14:00 – 16:00' },
+      { name: 'Intro to Soldering Workshop', date: '2026-05-08', time: '14:00 – 16:00', link: 'https://kclsu.org' },
       { name: 'Robotics Society Build Night', date: '2026-05-10', time: '18:00 – 21:00' },
       { name: 'KCL Rocketry — Launch Prep', date: '2026-05-14', time: '15:00 – 18:00' },
       { name: '3D Printing Masterclass', date: '2026-05-17', time: '13:00 – 15:00' },
       { name: 'Electronics Society Social', date: '2026-05-22', time: '19:00 – 22:00' }
     ],
     bbcEnabled: true,
-    carouselInterval: 8000
+    carouselInterval: 60000
   };
 
   // ---- State ----
@@ -103,7 +103,11 @@
 
   function getCarouselInterval() {
     try {
-      const stored = localStorage.getItem('wheatstone_carousel_interval');
+      let stored = localStorage.getItem('wheatstone_carousel_interval');
+      if (stored === '8000') {
+        localStorage.removeItem('wheatstone_carousel_interval');
+        stored = null;
+      }
       return stored ? parseInt(stored, 10) : DEFAULTS.carouselInterval;
     } catch (e) {
       return DEFAULTS.carouselInterval;
@@ -357,7 +361,7 @@
       item.innerHTML = `
         <span class="headline-text">
           <strong>${event.name}</strong>
-          <br><small style="color:var(--text-muted)">${dateStr}${event.time ? ' · ' + event.time : ''}</small>
+          <br><small style="color:var(--text-muted)">${dateStr}${event.time ? ' · ' + event.time : ''}${event.link ? ' · [QR Link]' : ''}</small>
         </span>
         <div class="headline-actions">
           <button class="btn btn-danger btn-icon" onclick="deleteEvent(${event._idx})" title="Delete">✕</button>
@@ -380,10 +384,12 @@
     const nameInput = document.getElementById('new-event-name');
     const dateInput = document.getElementById('new-event-date');
     const timeInput = document.getElementById('new-event-time');
+    const linkInput = document.getElementById('new-event-link');
 
     const name = nameInput.value.trim();
     const date = dateInput.value;
     const time = timeInput.value.trim();
+    const link = linkInput.value.trim();
 
     if (!name || !date) {
       showToast('Please enter event name and date', 'error');
@@ -391,12 +397,13 @@
     }
 
     const events = getEvents();
-    events.push({ name, date, time });
+    events.push({ name, date, time, link });
     setEvents(events);
 
     nameInput.value = '';
     dateInput.value = '';
     timeInput.value = '';
+    linkInput.value = '';
 
     loadEventsEditor();
     showToast('Event added');

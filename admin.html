@@ -182,6 +182,10 @@
                 <input type="text" id="new-event-time" placeholder="e.g. 14:00 – 16:00">
               </div>
             </div>
+            <div class="form-group">
+              <label for="new-event-link">Event Link (optional for QR Code)</label>
+              <input type="url" id="new-event-link" placeholder="https://...">
+            </div>
             <button class="btn btn-primary" id="add-event-btn" style="margin-top:8px">Add Event</button>
           </div>
         </div>
@@ -212,7 +216,7 @@
           </div>
           <div class="form-group">
             <label for="settings-interval">Auto-advance interval (seconds)</label>
-            <input type="number" id="settings-interval" min="1" max="120" value="8">
+            <input type="number" id="settings-interval" min="1" max="120" value="60">
           </div>
         </div>
 

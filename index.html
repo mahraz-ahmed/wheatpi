@@ -16,12 +16,33 @@
   <div class="dashboard">
     <!-- ===== HEADER ===== -->
     <header class="dashboard-header">
-      <div class="header-left">
+      <div class="header-brand">
+        <a href="admin.html" class="logo-container" title="Admin Panel">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(50,50)">
+              <circle cx="0" cy="0" r="12" fill="#a0a0b8"/>
+              <rect x="-8" y="-38" width="16" height="16" rx="2" fill="#f0f0f5"/>
+              <rect x="22" y="-8" width="16" height="16" rx="2" fill="#f0f0f5"/>
+              <rect x="-8" y="22" width="16" height="16" rx="2" fill="#f0f0f5"/>
+              <rect x="-38" y="-8" width="16" height="16" rx="2" fill="#f0f0f5"/>
+              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(25,-25) rotate(45)"/>
+              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(25,25) rotate(45)"/>
+              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(-25,25) rotate(45)"/>
+              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(-25,-25) rotate(45)"/>
+            </g>
+          </svg>
+        </a>
+        <div class="lab-info">
+          <div class="lab-name">Wheatstone Makerspace</div>
+          <div class="lab-location">Macadam Building · Strand Campus</div>
+        </div>
+      </div>
+
+      <div class="header-info">
         <div class="clock-container">
           <div class="clock-time" id="clock-time">00:00</div>
           <div class="clock-date" id="clock-date">Loading...</div>
         </div>
-        <div class="header-divider"></div>
         <div class="weather-container">
           <div class="weather-current">
             <span class="weather-icon" id="weather-icon">🌡️</span>
@@ -31,50 +52,15 @@
           <div class="weather-forecast" id="weather-forecast"></div>
         </div>
       </div>
-      <div class="header-right">
-        <div class="lab-info">
-          <div class="lab-name">Wheatstone Makerspace</div>
-          <div class="lab-location">Macadam Building · Strand Campus</div>
-        </div>
-        <a href="admin.html" class="logo-container" title="Admin Panel">
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Wheatstone Alliance geometric logo -->
-            <g transform="translate(50,50)">
-              <!-- Central circle -->
-              <circle cx="0" cy="0" r="12" fill="#a0a0b8"/>
-              <!-- Top block -->
-              <rect x="-8" y="-38" width="16" height="16" rx="2" fill="#f0f0f5" transform="rotate(0)"/>
-              <!-- Right block -->
-              <rect x="22" y="-8" width="16" height="16" rx="2" fill="#f0f0f5" transform="rotate(0)"/>
-              <!-- Bottom block -->
-              <rect x="-8" y="22" width="16" height="16" rx="2" fill="#f0f0f5" transform="rotate(0)"/>
-              <!-- Left block -->
-              <rect x="-38" y="-8" width="16" height="16" rx="2" fill="#f0f0f5" transform="rotate(0)"/>
-              <!-- Diagonal blocks (rotated 45deg) -->
-              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(25,-25) rotate(45)"/>
-              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(25,25) rotate(45)"/>
-              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(-25,25) rotate(45)"/>
-              <rect x="-6" y="-6" width="12" height="12" rx="2" fill="#a0a0b8" transform="translate(-25,-25) rotate(45)"/>
-            </g>
-          </svg>
-        </a>
-      </div>
     </header>
 
     <!-- ===== MAIN CONTENT ===== -->
     <div class="main-content">
-      <!-- Carousel (left) -->
-      <main class="carousel-container">
-        <div id="carousel-slides"></div>
-        <div class="carousel-indicators" id="carousel-dots"></div>
-      </main>
-
-      <!-- Side Panel (right) -->
+      <!-- Side Panel (Left) -->
       <aside class="side-panel">
         <!-- Status Updates -->
         <div class="status-panel">
           <div class="panel-header">
-            <span class="panel-icon">📢</span>
             <span class="panel-title">Status Updates</span>
           </div>
           <div class="status-content" id="status-content">
@@ -86,7 +72,6 @@
         <!-- Upcoming Events -->
         <div class="events-panel">
           <div class="panel-header">
-            <span class="panel-icon">📅</span>
             <span class="panel-title">Upcoming Events</span>
           </div>
           <div class="events-list" id="events-list">
@@ -94,15 +79,23 @@
           </div>
         </div>
       </aside>
+
+      <!-- Carousel (Right) -->
+      <main class="carousel-container">
+        <div id="carousel-slides"></div>
+        <div class="carousel-indicators" id="carousel-dots"></div>
+      </main>
     </div>
 
     <!-- ===== NEWS TICKER (BBC only) ===== -->
     <footer class="ticker-container">
       <div class="ticker-label">
-        <span class="ticker-dot"></span>
-        BBC News
+        <div class="ticker-dot"></div>
+        <span>BBC News</span>
       </div>
-      <div class="ticker-track" id="ticker-track"></div>
+      <div class="ticker-track" id="ticker-track">
+        <!-- Headlines will be injected here -->
+      </div>
     </footer>
   </div>
 

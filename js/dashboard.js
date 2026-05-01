@@ -19,14 +19,14 @@
       'Need help? Ask a Wheatstone Alliance committee member'
     ],
     events: [
-      { name: 'Intro to Soldering Workshop', date: '2026-05-08', time: '14:00 – 16:00' },
+      { name: 'Intro to Soldering Workshop', date: '2026-05-08', time: '14:00 – 16:00', link: 'https://kclsu.org' },
       { name: 'Robotics Society Build Night', date: '2026-05-10', time: '18:00 – 21:00' },
       { name: 'KCL Rocketry — Launch Prep', date: '2026-05-14', time: '15:00 – 18:00' },
       { name: '3D Printing Masterclass', date: '2026-05-17', time: '13:00 – 15:00' },
       { name: 'Electronics Society Social', date: '2026-05-22', time: '19:00 – 22:00' }
     ],
     bbcEnabled: true,
-    carouselInterval: 8000
+    carouselInterval: 60000
   };
 
   // ---- Weather code mapping ----
@@ -75,8 +75,15 @@
       slides = [...DEFAULTS.slides];
     }
     try {
-      const interval = localStorage.getItem('wheatstone_carousel_interval');
-      carouselInterval = interval ? parseInt(interval, 10) : DEFAULTS.carouselInterval;
+      let interval = localStorage.getItem('wheatstone_carousel_interval');
+      // Migration: If it's the old 8s default, clear it to use the new default
+      if (interval === '8000') {
+        localStorage.removeItem('wheatstone_carousel_interval');
+        interval = null;
+      }
+      carouselInterval = (interval && !isNaN(parseInt(interval, 10))) ? parseInt(interval, 10) : DEFAULTS.carouselInterval;
+      if (carouselInterval < 5000) carouselInterval = DEFAULTS.carouselInterval;
+      console.log('Wheatstone Dashboard: Carousel Interval set to', carouselInterval, 'ms');
     } catch (e) {
       carouselInterval = DEFAULTS.carouselInterval;
     }
@@ -229,9 +236,9 @@
   }
 
   function startCarouselTimer() {
-    if (carouselTimer) clearInterval(carouselTimer);
+    if (carouselTimer) clearTimeout(carouselTimer);
     if (slides.length > 1) {
-      carouselTimer = setInterval(nextSlide, carouselInterval);
+      carouselTimer = setTimeout(nextSlide, carouselInterval);
     }
   }
 
@@ -282,7 +289,7 @@
             d.classList.toggle('active', i === currentStatus);
           });
         }, 500);
-      }, 6000);
+      }, 10000);
     }
   }
 
@@ -318,6 +325,16 @@
 
       const item = document.createElement('div');
       item.className = 'event-item';
+      let qrHtml = '';
+      if (event.link) {
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(event.link)}&color=000000&bgcolor=ffffff`;
+        qrHtml = `
+          <div class="event-qr">
+            <img src="${qrUrl}" alt="QR Code">
+          </div>
+        `;
+      }
+
       item.innerHTML = `
         <div class="event-date-badge">
           <span class="event-month">${monthStr}</span>
@@ -327,6 +344,7 @@
           <div class="event-name">${event.name}</div>
           ${event.time ? `<div class="event-time">${event.time}</div>` : ''}
         </div>
+        ${qrHtml}
       `;
       listEl.appendChild(item);
     });
@@ -408,7 +426,7 @@
     trackEl.appendChild(fragment);
 
     const totalItems = headlines.length;
-    const duration = Math.max(30, totalItems * 4);
+    const duration = Math.max(60, totalItems * 12);
     trackEl.style.setProperty('--ticker-duration', `${duration}s`);
 
     setTimeout(initTicker, 5 * 60 * 1000);
