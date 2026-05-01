@@ -429,7 +429,9 @@
         try {
           const qr = new QRious({
             value: event.link,
-            size: 100
+            size: 100,
+            background: 'white',
+            foreground: 'black'
           });
           const qrUrl = qr.toDataURL();
           qrHtml = `
