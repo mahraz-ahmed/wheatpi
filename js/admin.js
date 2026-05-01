@@ -549,17 +549,19 @@
     if (username) {
       const creds = getCredentials();
       const newPassword = password || creds.password;
-      setCredentials(username, newPassword);
+      remoteData.credentials = { username, password: newPassword };
     }
 
     if (!isNaN(carouselInterval) && carouselInterval >= 1) {
-      setCarouselInterval(Math.round(carouselInterval * 1000));
+      remoteData.carouselInterval = Math.round(carouselInterval * 1000);
     }
     if (!isNaN(statusInterval) && statusInterval >= 1) {
-      setStatusInterval(Math.round(statusInterval * 1000));
+      remoteData.statusInterval = Math.round(statusInterval * 1000);
     }
 
-    setCloudinary(cloudName, uploadPreset);
+    remoteData.cloudinary = { cloudName, uploadPreset };
+
+    saveRemoteData();
 
     showToast("Settings saved");
     loadSettings();
