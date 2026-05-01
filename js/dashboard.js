@@ -426,12 +426,20 @@
       item.className = "event-item";
       let qrHtml = "";
       if (event.link) {
-        const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(event.link)}&size=100&margin=0`;
-        qrHtml = `
-          <div class="event-qr">
-            <img src="${qrUrl}" alt="QR Code">
-          </div>
-        `;
+        try {
+          const qr = new QRious({
+            value: event.link,
+            size: 100
+          });
+          const qrUrl = qr.toDataURL();
+          qrHtml = `
+            <div class="event-qr">
+              <img src="${qrUrl}" alt="QR Code">
+            </div>
+          `;
+        } catch (err) {
+          console.warn("QR Code generation failed:", err);
+        }
       }
 
       item.innerHTML = `
