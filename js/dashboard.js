@@ -159,7 +159,7 @@
 
   async function loadData() {
     try {
-      const res = await fetch("/api/data");
+      const res = await fetch("/api/data?t=" + new Date().getTime(), { cache: "no-store" });
       if (res.ok) {
         remoteData = await res.json();
       } else {
@@ -209,15 +209,17 @@
 
   // ---- Weather ----
   async function initWeather() {
-    const targetUrl = "https://api.open-meteo.com/v1/forecast?latitude=51.5113&longitude=-0.1160&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe%2FLondon";
-    
+    const targetUrl =
+      "https://api.open-meteo.com/v1/forecast?latitude=51.5113&longitude=-0.1160&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe%2FLondon";
+
     // Older TVs often fail Let's Encrypt certificates but trust Cloudflare/DigiCert.
     // GitHub Pages enforces HTTPS, so we can't use HTTP without Mixed Content errors.
     // Instead, we use the same proxy fallbacks as the BBC news ticker.
     const urlsToTry = [
-      "https://api.codetabs.com/v1/proxy/?quest=" + encodeURIComponent(targetUrl),
+      "https://api.codetabs.com/v1/proxy/?quest=" +
+        encodeURIComponent(targetUrl),
       "https://api.allorigins.win/raw?url=" + encodeURIComponent(targetUrl),
-      targetUrl
+      targetUrl,
     ];
 
     let data = null;
@@ -239,9 +241,12 @@
         const currentTemp = Math.round(data.current.temperature_2m);
         const currentCode = data.current.weather_code;
 
-        document.getElementById("weather-icon").textContent = WEATHER_ICONS[currentCode] || "🌡️";
-        document.getElementById("weather-temp").textContent = `${currentTemp}°C`;
-        document.getElementById("weather-desc").textContent = WEATHER_DESCS[currentCode] || "";
+        document.getElementById("weather-icon").textContent =
+          WEATHER_ICONS[currentCode] || "🌡️";
+        document.getElementById("weather-temp").textContent =
+          `${currentTemp}°C`;
+        document.getElementById("weather-desc").textContent =
+          WEATHER_DESCS[currentCode] || "";
 
         const forecastEl = document.getElementById("weather-forecast");
         forecastEl.innerHTML = "";

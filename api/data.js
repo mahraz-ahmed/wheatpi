@@ -60,8 +60,15 @@ const DEFAULTS = {
 };
 
 module.exports = async function handler(req, res) {
-  // If KV isn't configured yet, just return defaults so the site doesn't crash
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+  res.setHeader("Pragma", "no-cache");
+  res.setHeader("Expires", "0");
+
+  // If KV isn't configured yet, just return defaults so the site doesn't crash (for GET)
   if (!process.env.KV_REST_API_URL) {
+    if (req.method === "POST") {
+      return res.status(500).json({ error: "Vercel KV is not configured. Please set up KV_REST_API_URL in your Vercel project." });
+    }
     return res.status(200).json(DEFAULTS);
   }
 

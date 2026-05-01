@@ -72,7 +72,7 @@
   // ---- Storage helpers ----
   async function loadRemoteData() {
     try {
-      const res = await fetch("/api/data");
+      const res = await fetch("/api/data?t=" + new Date().getTime(), { cache: "no-store" });
       if (res.ok) {
         remoteData = await res.json();
       } else {
@@ -91,10 +91,17 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(remoteData),
       });
-      if (!res.ok) throw new Error("Save failed");
+      if (!res.ok) {
+        let errMsg = "Save failed";
+        try {
+          const errData = await res.json();
+          if (errData.error) errMsg = errData.error;
+        } catch (_) {}
+        throw new Error(errMsg);
+      }
     } catch (e) {
       console.error(e);
-      showToast("Failed to save to cloud database", "error");
+      showToast(e.message || "Failed to save to cloud database", "error");
     }
   }
 
