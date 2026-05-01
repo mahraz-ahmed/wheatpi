@@ -652,6 +652,6 @@
     // View dashboard link
     const viewDashBtn = document.getElementById("view-dashboard-btn");
     if (viewDashBtn)
-      viewDashBtn.addEventListener("click", () => window.open("index.html", "_blank"));
+      viewDashBtn.addEventListener("click", () => window.open("https://wheatpi.vercel.app", "_blank"));
   });
 })();

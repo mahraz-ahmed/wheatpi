@@ -426,7 +426,7 @@
       item.className = "event-item";
       let qrHtml = "";
       if (event.link) {
-        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(event.link)}&color=000000&bgcolor=ffffff`;
+        const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(event.link)}&size=100&margin=0`;
         qrHtml = `
           <div class="event-qr">
             <img src="${qrUrl}" alt="QR Code">
