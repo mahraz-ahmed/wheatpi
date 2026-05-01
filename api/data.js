@@ -40,6 +40,7 @@ const DEFAULTS = {
       name: "Intro to Soldering Workshop",
       date: "2026-05-08",
       time: "14:00 – 16:00",
+      caption: "Learn the basics of soldering components",
       link: "https://kclsu.org",
     },
     {

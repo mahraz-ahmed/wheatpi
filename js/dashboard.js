@@ -35,6 +35,7 @@
         name: "Intro to Soldering Workshop",
         date: "2026-05-08",
         time: "14:00 – 16:00",
+        caption: "Learn the basics of soldering components",
         link: "https://kclsu.org",
       },
       {
@@ -448,10 +449,11 @@
         <div class="event-date-badge">
           <span class="event-month">${monthStr}</span>
           <span class="event-day">${dayNum}</span>
+          ${event.time ? `<span class="event-badge-time">${event.time}</span>` : ""}
         </div>
         <div class="event-details">
           <div class="event-name">${event.name}</div>
-          ${event.time ? `<div class="event-time">${event.time}</div>` : ""}
+          ${event.caption ? `<div class="event-caption">${event.caption}</div>` : ""}
         </div>
         ${qrHtml}
       `;

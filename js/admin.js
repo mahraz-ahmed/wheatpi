@@ -38,6 +38,7 @@
         name: "Intro to Soldering Workshop",
         date: "2026-05-08",
         time: "14:00 – 16:00",
+        caption: "Learn the basics of soldering components",
         link: "https://kclsu.org",
       },
       {
@@ -426,7 +427,7 @@
       item.innerHTML = `
         <span class="headline-text">
           <strong>${event.name}</strong>
-          <br><small style="color:var(--text-muted)">${dateStr}${event.time ? " · " + event.time : ""}${event.link ? " · [QR Link]" : ""}</small>
+          <br><small style="color:var(--text-muted)">${dateStr}${event.time ? " · " + event.time : ""}${event.caption ? " · " + event.caption : ""}${event.link ? " · [QR Link]" : ""}</small>
         </span>
         <div class="headline-actions">
           <button class="btn btn-danger btn-icon" onclick="deleteEvent(${event._idx})" title="Delete">✕</button>
@@ -449,11 +450,13 @@
     const nameInput = document.getElementById("new-event-name");
     const dateInput = document.getElementById("new-event-date");
     const timeInput = document.getElementById("new-event-time");
+    const captionInput = document.getElementById("new-event-caption");
     const linkInput = document.getElementById("new-event-link");
 
     const name = nameInput.value.trim();
     const date = dateInput.value;
     const time = timeInput.value.trim();
+    const caption = captionInput.value.trim();
     const link = linkInput.value.trim();
 
     if (!name || !date) {
@@ -462,12 +465,13 @@
     }
 
     const events = getEvents();
-    events.push({ name, date, time, link });
+    events.push({ name, date, time, caption, link });
     setEvents(events);
 
     nameInput.value = "";
     dateInput.value = "";
     timeInput.value = "";
+    captionInput.value = "";
     linkInput.value = "";
 
     loadEventsEditor();
