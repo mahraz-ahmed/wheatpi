@@ -658,6 +658,11 @@
           return;
         }
 
+        if (file.size > 10 * 1024 * 1024) {
+          showToast("File is too large! Maximum size is 10 MB.", "error");
+          return;
+        }
+
         const cloudinaryCfg = getCloudinary();
         if (
           !cloudinaryCfg ||
