@@ -98,9 +98,13 @@
           <div class="card-header">
             <h3>Add New Slide</h3>
           </div>
-          <div class="add-form">
-            <div class="form-group">
-              <label for="new-slide-url">Image URL</label>
+          <div class="add-form" id="slide-add-form">
+            <div class="dropzone-area" id="slide-dropzone">
+              <span>Drag & Drop an image here or click to select</span>
+              <input type="file" id="new-slide-file" accept="image/*" style="display:none">
+            </div>
+            <div class="form-group" style="margin-top: 16px;">
+              <label for="new-slide-url">Or Image URL</label>
               <input type="url" id="new-slide-url" placeholder="https://example.com/image.jpg">
               <img class="image-preview" id="slide-preview-img" alt="Preview">
             </div>
@@ -200,13 +204,15 @@
           <div class="card-header">
             <h3>Admin Credentials</h3>
           </div>
-          <div class="form-group">
-            <label for="settings-username">Username</label>
-            <input type="text" id="settings-username" placeholder="admin">
-          </div>
-          <div class="form-group">
-            <label for="settings-password">New Password</label>
-            <input type="password" id="settings-password" placeholder="Leave blank to keep current">
+          <div class="card-body">
+            <div class="form-group">
+              <label for="settings-username">Username</label>
+              <input type="text" id="settings-username" placeholder="admin">
+            </div>
+            <div class="form-group" style="margin-bottom:0">
+              <label for="settings-password">New Password</label>
+              <input type="password" id="settings-password" placeholder="Leave blank to keep current">
+            </div>
           </div>
         </div>
 
@@ -214,9 +220,11 @@
           <div class="card-header">
             <h3>Carousel Settings</h3>
           </div>
-          <div class="form-group">
-            <label for="settings-interval">Auto-advance interval (seconds)</label>
-            <input type="number" id="settings-interval" min="1" max="120" value="60">
+          <div class="card-body">
+            <div class="form-group" style="margin-bottom:0">
+              <label for="settings-interval">Auto-advance interval (seconds)</label>
+              <input type="number" id="settings-interval" min="1" max="120" value="60">
+            </div>
           </div>
         </div>
 

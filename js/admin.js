@@ -493,6 +493,59 @@
       btn.addEventListener('click', () => switchSection(btn.dataset.section));
     });
 
+    // Drag and Drop
+    const dropzone = document.getElementById('slide-dropzone');
+    const fileInput = document.getElementById('new-slide-file');
+    const urlInput = document.getElementById('new-slide-url');
+
+    if (dropzone && fileInput) {
+      dropzone.addEventListener('click', () => fileInput.click());
+      
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+      });
+      
+      dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('dragover');
+      });
+      
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+          handleFile(e.dataTransfer.files[0]);
+        }
+      });
+      
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      function handleFile(file) {
+        if (!file.type.startsWith('image/')) {
+          showToast('Please upload an image file', 'error');
+          return;
+        }
+        // Base64 limit check (localStorage is ~5MB)
+        if (file.size > 2 * 1024 * 1024) {
+          showToast('File is too large (max 2MB)', 'error');
+          return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          urlInput.value = e.target.result;
+          const event = new Event('input', { bubbles: true });
+          urlInput.dispatchEvent(event);
+          showToast('Image loaded');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
     // Add slide
     const addSlideBtn = document.getElementById('add-slide-btn');
     if (addSlideBtn) addSlideBtn.addEventListener('click', handleAddSlide);
