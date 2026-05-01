@@ -163,6 +163,14 @@
     saveRemoteData();
   }
 
+  function getCloudinary() {
+    return remoteData?.cloudinary || { cloudName: "", uploadPreset: "" };
+  }
+  function setCloudinary(cloudName, uploadPreset) {
+    remoteData.cloudinary = { cloudName, uploadPreset };
+    saveRemoteData();
+  }
+
   // ---- Toast notifications ----
   function showToast(message, type = "success") {
     const existing = document.querySelector(".toast");
@@ -489,10 +497,16 @@
   function loadSettings() {
     const creds = getCredentials();
     const interval = getCarouselInterval();
+    const cloudinary = getCloudinary();
 
     document.getElementById("settings-username").value = creds.username;
     document.getElementById("settings-password").value = "";
     document.getElementById("settings-interval").value = interval / 1000;
+    
+    if (document.getElementById("settings-cloudinary-cloud")) {
+      document.getElementById("settings-cloudinary-cloud").value = cloudinary.cloudName || "";
+      document.getElementById("settings-cloudinary-preset").value = cloudinary.uploadPreset || "";
+    }
   }
 
   function handleSaveSettings(e) {
@@ -503,6 +517,9 @@
     const intervalEl = document.getElementById("settings-interval");
     const interval = parseFloat(intervalEl.value);
 
+    const cloudName = document.getElementById("settings-cloudinary-cloud")?.value.trim() || "";
+    const uploadPreset = document.getElementById("settings-cloudinary-preset")?.value.trim() || "";
+
     if (username) {
       const creds = getCredentials();
       const newPassword = password || creds.password;
@@ -512,6 +529,8 @@
     if (!isNaN(interval) && interval >= 1) {
       setCarouselInterval(Math.round(interval * 1000));
     }
+
+    setCloudinary(cloudName, uploadPreset);
 
     showToast("Settings saved");
     loadSettings();
@@ -611,18 +630,77 @@
           showToast("Please upload an image file", "error");
           return;
         }
-        // Base64 limit check (localStorage is ~5MB)
-        if (file.size > 2 * 1024 * 1024) {
-          showToast("File is too large (max 2MB)", "error");
+
+        const cloudinaryCfg = getCloudinary();
+        if (cloudinaryCfg && cloudinaryCfg.cloudName && cloudinaryCfg.uploadPreset) {
+          showToast("Uploading to Cloudinary...", "success");
+          
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", cloudinaryCfg.uploadPreset);
+
+          fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCfg.cloudName}/image/upload`, {
+            method: "POST",
+            body: formData,
+          })
+          .then(res => res.json())
+          .then(data => {
+            if (data.secure_url) {
+              urlInput.value = data.secure_url;
+              const event = new Event("input", { bubbles: true });
+              urlInput.dispatchEvent(event);
+              showToast("Uploaded to Cloudinary!");
+            } else {
+              throw new Error(data.error?.message || "Upload failed");
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            showToast("Cloudinary upload failed", "error");
+          });
+          
           return;
         }
 
         const reader = new FileReader();
         reader.onload = (e) => {
-          urlInput.value = e.target.result;
-          const event = new Event("input", { bubbles: true });
-          urlInput.dispatchEvent(event);
-          showToast("Image loaded");
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            let width = img.width;
+            let height = img.height;
+            const MAX_WIDTH = 1920;
+            const MAX_HEIGHT = 1080;
+
+            if (width > height) {
+              if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width;
+                width = MAX_WIDTH;
+              }
+            } else {
+              if (height > MAX_HEIGHT) {
+                width *= MAX_HEIGHT / height;
+                height = MAX_HEIGHT;
+              }
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+            
+            if (dataUrl.length > 500000) {
+              showToast("Image is still too large. Please configure Cloudinary.", "error");
+              return;
+            }
+
+            urlInput.value = dataUrl;
+            const event = new Event("input", { bubbles: true });
+            urlInput.dispatchEvent(event);
+            showToast("Image compressed and loaded");
+          };
+          img.src = e.target.result;
         };
         reader.readAsDataURL(file);
       }

@@ -481,6 +481,31 @@
             </div>
           </div>
 
+          <div class="admin-card">
+            <div class="card-header">
+              <h3>Cloudinary Storage (Optional)</h3>
+            </div>
+            <div class="card-body">
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Configure Cloudinary for high-quality image uploads without hitting database limits.</p>
+              <div class="form-group">
+                <label for="settings-cloudinary-cloud">Cloud Name</label>
+                <input
+                  type="text"
+                  id="settings-cloudinary-cloud"
+                  placeholder="e.g. dxxxxxxxx"
+                />
+              </div>
+              <div class="form-group" style="margin-bottom: 0">
+                <label for="settings-cloudinary-preset">Upload Preset (Unsigned)</label>
+                <input
+                  type="text"
+                  id="settings-cloudinary-preset"
+                  placeholder="e.g. dashboard_uploads"
+                />
+              </div>
+            </div>
+          </div>
+
           <div style="display: flex; gap: 12px; margin-top: 8px">
             <button
               class="btn btn-primary"
