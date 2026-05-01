@@ -1,4 +1,16 @@
-const { kv } = require("@vercel/kv");
+const { createClient } = require("@vercel/kv");
+
+// Create a custom client that checks for both Vercel KV and Upstash Redis env vars
+const kvUrl = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const kvToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
+let kv;
+if (kvUrl && kvToken) {
+  kv = createClient({
+    url: kvUrl,
+    token: kvToken,
+  });
+}
 
 const DEFAULTS = {
   slides: [
@@ -65,9 +77,9 @@ module.exports = async function handler(req, res) {
   res.setHeader("Expires", "0");
 
   // If KV isn't configured yet, just return defaults so the site doesn't crash (for GET)
-  if (!process.env.KV_REST_API_URL) {
+  if (!kvUrl) {
     if (req.method === "POST") {
-      return res.status(500).json({ error: "Vercel KV is not configured. Please set up KV_REST_API_URL in your Vercel project." });
+      return res.status(500).json({ error: "Database is not configured. Please add Upstash Redis to your Vercel project." });
     }
     return res.status(200).json(DEFAULTS);
   }
