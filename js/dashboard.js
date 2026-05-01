@@ -471,21 +471,21 @@
     });
   }
 
-  // ---- News Ticker (BBC only now) ----
+  // ---- News Ticker ----
   async function initTicker() {
     const trackEl = document.getElementById("ticker-track");
     if (!trackEl) return;
 
     let headlines = [];
 
-    // Fetch BBC News if enabled
+    // Fetch Tech News if enabled
     if (isBBCEnabled()) {
-      const bbcFeedUrl = "https://feeds.bbci.co.uk/news/rss.xml";
+      const feedUrl = "https://www.engadget.com/rss.xml";
       const proxies = [
         "https://api.codetabs.com/v1/proxy/?quest=" +
-          encodeURIComponent(bbcFeedUrl),
-        "https://api.allorigins.win/raw?url=" + encodeURIComponent(bbcFeedUrl),
-        "https://corsproxy.io/?" + encodeURIComponent(bbcFeedUrl),
+          encodeURIComponent(feedUrl),
+        "https://api.allorigins.win/raw?url=" + encodeURIComponent(feedUrl),
+        "https://corsproxy.io/?" + encodeURIComponent(feedUrl),
       ];
 
       let fetched = false;
@@ -494,22 +494,34 @@
           const res = await fetch(proxyUrl);
           if (!res.ok) continue;
           const text = await res.text();
-          if (!text.includes("<item>") && !text.includes("<item ")) continue;
+          const isAtom = text.includes("<entry>") || text.includes("<entry ");
+          if (!text.includes("<item>") && !text.includes("<item ") && !isAtom) continue;
 
           const parser = new DOMParser();
           const xml = parser.parseFromString(text, "text/xml");
-          const items = xml.querySelectorAll("item");
+          const items = isAtom ? xml.querySelectorAll("entry") : xml.querySelectorAll("item");
           let count = 0;
+
+          function decodeHTMLEntities(str) {
+            const txt = document.createElement("textarea");
+            txt.innerHTML = str;
+            return txt.value;
+          }
 
           items.forEach((item) => {
             if (count >= 12) return;
             const title = item.querySelector("title");
-            const desc = item.querySelector("description");
+            const desc = item.querySelector("description") || item.querySelector("summary") || item.querySelector("content");
             if (title && title.textContent) {
-              let text = title.textContent.trim();
-              // Add description for a brief overview instead of just the headline
+              let text = decodeHTMLEntities(title.textContent).trim();
+              
               if (desc && desc.textContent) {
-                const descText = desc.textContent.trim();
+                // Strip HTML tags that might be inside CDATA blocks
+                let descText = desc.textContent.replace(/<[^>]*>?/gm, '').trim();
+                descText = decodeHTMLEntities(descText);
+                // Avoid giant descriptions breaking the ticker
+                if (descText.length > 100) descText = descText.substring(0, 100) + "...";
+
                 if (descText && descText !== text) {
                   text += " — " + descText;
                 }
@@ -527,11 +539,11 @@
 
       if (!fetched) {
         headlines.push(
-          "BBC News feed temporarily unavailable — check back shortly",
+          "Tech News feed temporarily unavailable — check back shortly",
         );
       }
     } else {
-      headlines.push("BBC News feed is disabled");
+      headlines.push("Tech News feed is disabled");
     }
 
     // Build ticker track (duplicate for seamless loop)

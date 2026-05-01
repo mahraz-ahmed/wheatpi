@@ -404,7 +404,7 @@
   function handleBBCToggle() {
     const enabled = document.getElementById("bbc-toggle").checked;
     setBBCEnabled(enabled);
-    showToast(enabled ? "BBC News enabled" : "BBC News disabled");
+    showToast(enabled ? "Tech News enabled" : "Tech News disabled");
   }
 
   // ---- Events Editor ----
@@ -748,7 +748,7 @@
     const viewDashBtn = document.getElementById("view-dashboard-btn");
     if (viewDashBtn)
       viewDashBtn.addEventListener("click", () =>
-        window.open("https://wheatpi.vercel.app", "_blank"),
+        window.open("index.html", "_blank"),
       );
   });
 })();
