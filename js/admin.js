@@ -671,8 +671,8 @@
         showToast("Uploading to Cloudinary...", "success");
 
         const formData = new FormData();
-        formData.append("file", file);
         formData.append("upload_preset", cloudinaryCfg.uploadPreset);
+        formData.append("file", file);
 
         fetch(
           `https://api.cloudinary.com/v1_1/${cloudinaryCfg.cloudName}/image/upload`,
@@ -681,7 +681,15 @@
             body: formData,
           },
         )
-          .then((res) => res.json())
+          .then(async (res) => {
+            const data = await res.text();
+            try {
+              return JSON.parse(data);
+            } catch (e) {
+              if (!res.ok) throw new Error(`Server returned status ${res.status}`);
+              throw new Error("Invalid JSON response from Cloudinary");
+            }
+          })
           .then((data) => {
             if (data.secure_url) {
               urlInput.value = data.secure_url;
@@ -689,12 +697,12 @@
               urlInput.dispatchEvent(event);
               showToast("Uploaded to Cloudinary!");
             } else {
-              throw new Error(data.error?.message || "Upload failed");
+              throw new Error(data.error?.message || "Upload failed without error message");
             }
           })
           .catch((err) => {
             console.error(err);
-            showToast("Cloudinary upload failed", "error");
+            showToast(`Upload failed: ${err.message}`, "error");
           });
       }
     }
