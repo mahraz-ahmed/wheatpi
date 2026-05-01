@@ -445,6 +445,8 @@
         }
       }
 
+      const displayName = event.name.length > 42 ? event.name.substring(0, 39) + "..." : event.name;
+
       item.innerHTML = `
         <div class="event-date-badge">
           <span class="event-month">${monthStr}</span>
@@ -452,7 +454,7 @@
           ${event.time ? `<span class="event-badge-time">${event.time}</span>` : ""}
         </div>
         <div class="event-details">
-          <div class="event-name">${event.name}</div>
+          <div class="event-name">${displayName}</div>
           ${event.caption ? `<div class="event-caption">${event.caption}</div>` : ""}
         </div>
         ${qrHtml}

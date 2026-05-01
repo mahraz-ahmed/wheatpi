@@ -304,6 +304,8 @@ body {
   border-bottom: 1px solid var(--border-primary);
   background: var(--bg-card);
   transition: background 0.2s;
+  height: 76px;
+  overflow: hidden;
 }
 .event-item:hover {
   background: var(--bg-tertiary);
@@ -331,7 +333,7 @@ body {
   line-height: 1.1;
 }
 .event-details {
-  padding: 16px;
+  padding: 8px 16px;
   display: flex;
   flex-direction: column;
   justify-content: center;

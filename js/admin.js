@@ -424,9 +424,11 @@
       const dateStr = `${d.getDate()} ${MONTH_SHORT[d.getMonth()]} ${d.getFullYear()}`;
       const item = document.createElement("div");
       item.className = "headline-item";
+      const displayName = event.name.length > 42 ? event.name.substring(0, 39) + "..." : event.name;
+
       item.innerHTML = `
         <span class="headline-text">
-          <strong>${event.name}</strong>
+          <strong>${displayName}</strong>
           <br><small style="color:var(--text-muted)">${dateStr}${event.time ? " · " + event.time : ""}${event.caption ? " · " + event.caption : ""}${event.link ? " · [QR Link]" : ""}</small>
         </span>
         <div class="headline-actions">
@@ -453,7 +455,7 @@
     const captionInput = document.getElementById("new-event-caption");
     const linkInput = document.getElementById("new-event-link");
 
-    const name = nameInput.value.trim();
+    const name = nameInput.value.trim().substring(0, 42);
     const date = dateInput.value;
     const time = timeInput.value.trim();
     const caption = captionInput.value.trim();
