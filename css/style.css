@@ -239,7 +239,7 @@ html, body {
   height: 100%;
   object-fit: cover;
   transform: scale(1);
-  transition: transform 62s linear;
+  transition: transform 7s linear;
 }
 .carousel-slide.active img { transform: scale(1.08); }
 

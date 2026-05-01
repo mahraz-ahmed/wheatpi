@@ -62,7 +62,7 @@
       },
     ],
     bbcEnabled: true,
-    carouselInterval: 60000,
+    carouselInterval: 5000,
   };
 
   // ---- State ----

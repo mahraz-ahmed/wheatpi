@@ -59,7 +59,7 @@
       },
     ],
     bbcEnabled: true,
-    carouselInterval: 60000,
+    carouselInterval: 5000,
   };
 
   // ---- Weather code mapping ----
@@ -388,7 +388,7 @@
             d.classList.toggle("active", i === currentStatus);
           });
         }, 500);
-      }, 10000);
+      }, 5000);
     }
   }
 
