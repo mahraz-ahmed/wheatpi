@@ -66,55 +66,28 @@
   let currentStatus = 0;
   let statusTimer = null;
 
-  // ---- Load Data from localStorage ----
-  function loadData() {
+  let remoteData = null;
+
+  async function loadData() {
     try {
-      const stored = localStorage.getItem('wheatstone_slides');
-      slides = stored ? JSON.parse(stored) : [...DEFAULTS.slides];
-    } catch (e) {
-      slides = [...DEFAULTS.slides];
-    }
-    try {
-      let interval = localStorage.getItem('wheatstone_carousel_interval');
-      // Migration: If it's the old 8s default, clear it to use the new default
-      if (interval === '8000') {
-        localStorage.removeItem('wheatstone_carousel_interval');
-        interval = null;
+      const res = await fetch('/api/data');
+      if (res.ok) {
+        remoteData = await res.json();
+      } else {
+        remoteData = DEFAULTS;
       }
-      carouselInterval = (interval && !isNaN(parseInt(interval, 10))) ? parseInt(interval, 10) : DEFAULTS.carouselInterval;
-      if (carouselInterval < 5000) carouselInterval = DEFAULTS.carouselInterval;
-      console.log('Wheatstone Dashboard: Carousel Interval set to', carouselInterval, 'ms');
     } catch (e) {
-      carouselInterval = DEFAULTS.carouselInterval;
+      console.warn('Backend unavailable, using defaults');
+      remoteData = DEFAULTS;
     }
+    
+    slides = remoteData.slides || DEFAULTS.slides;
+    carouselInterval = remoteData.carouselInterval || DEFAULTS.carouselInterval;
   }
 
-  function getStatusUpdates() {
-    try {
-      const stored = localStorage.getItem('wheatstone_headlines');
-      return stored ? JSON.parse(stored) : [...DEFAULTS.statusUpdates];
-    } catch (e) {
-      return [...DEFAULTS.statusUpdates];
-    }
-  }
-
-  function getEvents() {
-    try {
-      const stored = localStorage.getItem('wheatstone_events');
-      return stored ? JSON.parse(stored) : [...DEFAULTS.events];
-    } catch (e) {
-      return [...DEFAULTS.events];
-    }
-  }
-
-  function isBBCEnabled() {
-    try {
-      const stored = localStorage.getItem('wheatstone_bbc_enabled');
-      return stored !== null ? JSON.parse(stored) : DEFAULTS.bbcEnabled;
-    } catch (e) {
-      return DEFAULTS.bbcEnabled;
-    }
-  }
+  function getStatusUpdates() { return remoteData?.statusUpdates || DEFAULTS.statusUpdates; }
+  function getEvents() { return remoteData?.events || DEFAULTS.events; }
+  function isBBCEnabled() { return remoteData?.bbcEnabled !== undefined ? remoteData.bbcEnabled : DEFAULTS.bbcEnabled; }
 
   // ---- Clock ----
   function initClock() {
@@ -141,7 +114,7 @@
   async function initWeather() {
     const LAT = 51.5115;
     const LON = -0.1160;
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe/London&forecast_days=5`;
+    const url = `http://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe/London&forecast_days=5`;
 
     try {
       const res = await fetch(url);
@@ -432,32 +405,18 @@
     setTimeout(initTicker, 5 * 60 * 1000);
   }
 
-  // ---- Reload on storage change (when admin saves from another tab) ----
-  window.addEventListener('storage', (e) => {
-    if (e.key && e.key.startsWith('wheatstone_')) {
-      if (e.key === 'wheatstone_slides' || e.key === 'wheatstone_carousel_interval') {
-        initCarousel();
-      }
-      if (e.key === 'wheatstone_headlines') {
-        initStatusUpdates();
-      }
-      if (e.key === 'wheatstone_events') {
-        initEvents();
-      }
-      if (e.key === 'wheatstone_bbc_enabled') {
-        initTicker();
-      }
-    }
-  });
-
   // ---- Init ----
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadData();
     initClock();
     initWeather();
     initCarousel();
     initStatusUpdates();
     initEvents();
     initTicker();
+
+    // The TV should reload entirely every 30 minutes to pick up code/data updates cleanly
+    setInterval(() => location.reload(), 30 * 60 * 1000);
   });
 
 })();

@@ -34,88 +34,71 @@
 
   // ---- State ----
   let isLoggedIn = false;
+  let remoteData = null;
 
   // ---- Storage helpers ----
-  function getCredentials() {
+  async function loadRemoteData() {
     try {
-      const stored = localStorage.getItem('wheatstone_credentials');
-      return stored ? JSON.parse(stored) : { username: DEFAULT_USERNAME, password: DEFAULT_PASSWORD };
-    } catch (e) {
-      return { username: DEFAULT_USERNAME, password: DEFAULT_PASSWORD };
-    }
-  }
-
-  function setCredentials(username, password) {
-    localStorage.setItem('wheatstone_credentials', JSON.stringify({ username, password }));
-  }
-
-  function getSlides() {
-    try {
-      const stored = localStorage.getItem('wheatstone_slides');
-      return stored ? JSON.parse(stored) : [...DEFAULTS.slides];
-    } catch (e) {
-      return [...DEFAULTS.slides];
-    }
-  }
-
-  function setSlides(slides) {
-    localStorage.setItem('wheatstone_slides', JSON.stringify(slides));
-  }
-
-  function getHeadlines() {
-    try {
-      const stored = localStorage.getItem('wheatstone_headlines');
-      return stored ? JSON.parse(stored) : [...DEFAULTS.statusMessages];
-    } catch (e) {
-      return [...DEFAULTS.statusMessages];
-    }
-  }
-
-  function setHeadlines(headlines) {
-    localStorage.setItem('wheatstone_headlines', JSON.stringify(headlines));
-  }
-
-  function getEvents() {
-    try {
-      const stored = localStorage.getItem('wheatstone_events');
-      return stored ? JSON.parse(stored) : [...DEFAULTS.events];
-    } catch (e) {
-      return [...DEFAULTS.events];
-    }
-  }
-
-  function setEvents(events) {
-    localStorage.setItem('wheatstone_events', JSON.stringify(events));
-  }
-
-  function getBBCEnabled() {
-    try {
-      const stored = localStorage.getItem('wheatstone_bbc_enabled');
-      return stored !== null ? JSON.parse(stored) : DEFAULTS.bbcEnabled;
-    } catch (e) {
-      return DEFAULTS.bbcEnabled;
-    }
-  }
-
-  function setBBCEnabled(enabled) {
-    localStorage.setItem('wheatstone_bbc_enabled', JSON.stringify(enabled));
-  }
-
-  function getCarouselInterval() {
-    try {
-      let stored = localStorage.getItem('wheatstone_carousel_interval');
-      if (stored === '8000') {
-        localStorage.removeItem('wheatstone_carousel_interval');
-        stored = null;
+      const res = await fetch('/api/data');
+      if (res.ok) {
+        remoteData = await res.json();
+      } else {
+        remoteData = JSON.parse(JSON.stringify(DEFAULTS));
       }
-      return stored ? parseInt(stored, 10) : DEFAULTS.carouselInterval;
     } catch (e) {
-      return DEFAULTS.carouselInterval;
+      console.warn('Backend unavailable, using defaults');
+      remoteData = JSON.parse(JSON.stringify(DEFAULTS));
     }
   }
 
-  function setCarouselInterval(ms) {
-    localStorage.setItem('wheatstone_carousel_interval', String(ms));
+  async function saveRemoteData() {
+    try {
+      const res = await fetch('/api/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(remoteData)
+      });
+      if (!res.ok) throw new Error('Save failed');
+    } catch (e) {
+      console.error(e);
+      showToast('Failed to save to cloud database', 'error');
+    }
+  }
+
+  function getCredentials() { return remoteData?.credentials || { username: DEFAULT_USERNAME, password: DEFAULT_PASSWORD }; }
+  function setCredentials(username, password) { 
+    remoteData.credentials = { username, password }; 
+    saveRemoteData(); 
+  }
+
+  function getSlides() { return remoteData?.slides || DEFAULTS.slides; }
+  function setSlides(slides) { 
+    remoteData.slides = slides; 
+    saveRemoteData(); 
+  }
+
+  function getHeadlines() { return remoteData?.statusUpdates || DEFAULTS.statusMessages; }
+  function setHeadlines(headlines) { 
+    remoteData.statusUpdates = headlines; 
+    saveRemoteData(); 
+  }
+
+  function getEvents() { return remoteData?.events || DEFAULTS.events; }
+  function setEvents(events) { 
+    remoteData.events = events; 
+    saveRemoteData(); 
+  }
+
+  function getBBCEnabled() { return remoteData?.bbcEnabled !== undefined ? remoteData.bbcEnabled : DEFAULTS.bbcEnabled; }
+  function setBBCEnabled(enabled) { 
+    remoteData.bbcEnabled = enabled; 
+    saveRemoteData(); 
+  }
+
+  function getCarouselInterval() { return remoteData?.carouselInterval || DEFAULTS.carouselInterval; }
+  function setCarouselInterval(interval) { 
+    remoteData.carouselInterval = interval; 
+    saveRemoteData(); 
   }
 
   // ---- Toast notifications ----
@@ -473,7 +456,9 @@
   }
 
   // ---- Init ----
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadRemoteData();
+
     // Check for existing session
     if (sessionStorage.getItem('wheatstone_admin_session') === 'true') {
       isLoggedIn = true;
