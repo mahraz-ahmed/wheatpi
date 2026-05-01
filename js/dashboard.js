@@ -4,59 +4,148 @@
    ======================================== */
 
 (function () {
-  'use strict';
+  "use strict";
 
   // ---- Default Data ----
   const DEFAULTS = {
     slides: [
-      { url: 'assets/carousel_default_1.png', caption: 'Welcome to the Wheatstone Makerspace — Build • Create • Innovate' },
-      { url: 'assets/carousel_default_2.png', caption: 'Open to all KCL students — Mon-Fri • Macadam Building • Strand Campus' },
-      { url: 'assets/carousel_default_3.png', caption: '3D Printing • Laser Cutting • CNC — Equipment available for your projects' }
+      {
+        url: "assets/carousel_default_1.png",
+        caption:
+          "Welcome to the Wheatstone Makerspace — Build • Create • Innovate",
+      },
+      {
+        url: "assets/carousel_default_2.png",
+        caption:
+          "Open to all KCL students — Mon-Fri • Macadam Building • Strand Campus",
+      },
+      {
+        url: "assets/carousel_default_3.png",
+        caption:
+          "3D Printing • Laser Cutting • CNC — Equipment available for your projects",
+      },
     ],
     statusUpdates: [
-      'Welcome to the Wheatstone Makerspace — Macadam Building, Strand Campus',
-      'Remember: No food or drink allowed in the lab!',
-      'Need help? Ask a Wheatstone Alliance committee member'
+      "Welcome to the Wheatstone Makerspace — Macadam Building, Strand Campus",
+      "Remember: No food or drink allowed in the lab!",
+      "Need help? Ask a Wheatstone Alliance committee member",
     ],
     events: [
-      { name: 'Intro to Soldering Workshop', date: '2026-05-08', time: '14:00 – 16:00', link: 'https://kclsu.org' },
-      { name: 'Robotics Society Build Night', date: '2026-05-10', time: '18:00 – 21:00' },
-      { name: 'KCL Rocketry — Launch Prep', date: '2026-05-14', time: '15:00 – 18:00' },
-      { name: '3D Printing Masterclass', date: '2026-05-17', time: '13:00 – 15:00' },
-      { name: 'Electronics Society Social', date: '2026-05-22', time: '19:00 – 22:00' }
+      {
+        name: "Intro to Soldering Workshop",
+        date: "2026-05-08",
+        time: "14:00 – 16:00",
+        link: "https://kclsu.org",
+      },
+      {
+        name: "Robotics Society Build Night",
+        date: "2026-05-10",
+        time: "18:00 – 21:00",
+      },
+      {
+        name: "KCL Rocketry — Launch Prep",
+        date: "2026-05-14",
+        time: "15:00 – 18:00",
+      },
+      {
+        name: "3D Printing Masterclass",
+        date: "2026-05-17",
+        time: "13:00 – 15:00",
+      },
+      {
+        name: "Electronics Society Social",
+        date: "2026-05-22",
+        time: "19:00 – 22:00",
+      },
     ],
     bbcEnabled: true,
-    carouselInterval: 60000
+    carouselInterval: 60000,
   };
 
   // ---- Weather code mapping ----
   const WEATHER_ICONS = {
-    0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
-    45: '🌫️', 48: '🌫️',
-    51: '🌦️', 53: '🌦️', 55: '🌧️',
-    61: '🌧️', 63: '🌧️', 65: '🌧️',
-    71: '🌨️', 73: '🌨️', 75: '🌨️',
-    77: '🌨️', 80: '🌦️', 81: '🌧️', 82: '🌧️',
-    85: '🌨️', 86: '🌨️',
-    95: '⛈️', 96: '⛈️', 99: '⛈️'
+    0: "☀️",
+    1: "🌤️",
+    2: "⛅",
+    3: "☁️",
+    45: "🌫️",
+    48: "🌫️",
+    51: "🌦️",
+    53: "🌦️",
+    55: "🌧️",
+    61: "🌧️",
+    63: "🌧️",
+    65: "🌧️",
+    71: "🌨️",
+    73: "🌨️",
+    75: "🌨️",
+    77: "🌨️",
+    80: "🌦️",
+    81: "🌧️",
+    82: "🌧️",
+    85: "🌨️",
+    86: "🌨️",
+    95: "⛈️",
+    96: "⛈️",
+    99: "⛈️",
   };
 
   const WEATHER_DESCS = {
-    0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
-    45: 'Foggy', 48: 'Rime fog',
-    51: 'Light drizzle', 53: 'Drizzle', 55: 'Heavy drizzle',
-    61: 'Light rain', 63: 'Rain', 65: 'Heavy rain',
-    71: 'Light snow', 73: 'Snow', 75: 'Heavy snow',
-    77: 'Snow grains', 80: 'Light showers', 81: 'Showers', 82: 'Heavy showers',
-    85: 'Light snow showers', 86: 'Snow showers',
-    95: 'Thunderstorm', 96: 'Thunderstorm w/ hail', 99: 'Severe thunderstorm'
+    0: "Clear sky",
+    1: "Mainly clear",
+    2: "Partly cloudy",
+    3: "Overcast",
+    45: "Foggy",
+    48: "Rime fog",
+    51: "Light drizzle",
+    53: "Drizzle",
+    55: "Heavy drizzle",
+    61: "Light rain",
+    63: "Rain",
+    65: "Heavy rain",
+    71: "Light snow",
+    73: "Snow",
+    75: "Heavy snow",
+    77: "Snow grains",
+    80: "Light showers",
+    81: "Showers",
+    82: "Heavy showers",
+    85: "Light snow showers",
+    86: "Snow showers",
+    95: "Thunderstorm",
+    96: "Thunderstorm w/ hail",
+    99: "Severe thunderstorm",
   };
 
-  const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'];
-  const MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const MONTH_NAMES = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const MONTH_SHORT = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
   // ---- State ----
   let currentSlide = 0;
@@ -70,34 +159,42 @@
 
   async function loadData() {
     try {
-      const res = await fetch('/api/data');
+      const res = await fetch("/api/data");
       if (res.ok) {
         remoteData = await res.json();
       } else {
         remoteData = DEFAULTS;
       }
     } catch (e) {
-      console.warn('Backend unavailable, using defaults');
+      console.warn("Backend unavailable, using defaults");
       remoteData = DEFAULTS;
     }
-    
+
     slides = remoteData.slides || DEFAULTS.slides;
     carouselInterval = remoteData.carouselInterval || DEFAULTS.carouselInterval;
   }
 
-  function getStatusUpdates() { return remoteData?.statusUpdates || DEFAULTS.statusUpdates; }
-  function getEvents() { return remoteData?.events || DEFAULTS.events; }
-  function isBBCEnabled() { return remoteData?.bbcEnabled !== undefined ? remoteData.bbcEnabled : DEFAULTS.bbcEnabled; }
+  function getStatusUpdates() {
+    return remoteData?.statusUpdates || DEFAULTS.statusUpdates;
+  }
+  function getEvents() {
+    return remoteData?.events || DEFAULTS.events;
+  }
+  function isBBCEnabled() {
+    return remoteData?.bbcEnabled !== undefined
+      ? remoteData.bbcEnabled
+      : DEFAULTS.bbcEnabled;
+  }
 
   // ---- Clock ----
   function initClock() {
-    const timeEl = document.getElementById('clock-time');
-    const dateEl = document.getElementById('clock-date');
+    const timeEl = document.getElementById("clock-time");
+    const dateEl = document.getElementById("clock-date");
 
     function update() {
       const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const mins = String(now.getMinutes()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, "0");
+      const mins = String(now.getMinutes()).padStart(2, "0");
       timeEl.textContent = `${hours}:${mins}`;
 
       const dayName = DAY_NAMES[now.getDay()];
@@ -112,9 +209,7 @@
 
   // ---- Weather ----
   async function initWeather() {
-    const LAT = 51.5115;
-    const LON = -0.1160;
-    const url = `http://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe/London&forecast_days=5`;
+    const url = `/api/weather`;
 
     try {
       const res = await fetch(url);
@@ -123,12 +218,14 @@
       const currentTemp = Math.round(data.current.temperature_2m);
       const currentCode = data.current.weather_code;
 
-      document.getElementById('weather-icon').textContent = WEATHER_ICONS[currentCode] || '🌡️';
-      document.getElementById('weather-temp').textContent = `${currentTemp}°C`;
-      document.getElementById('weather-desc').textContent = WEATHER_DESCS[currentCode] || '';
+      document.getElementById("weather-icon").textContent =
+        WEATHER_ICONS[currentCode] || "🌡️";
+      document.getElementById("weather-temp").textContent = `${currentTemp}°C`;
+      document.getElementById("weather-desc").textContent =
+        WEATHER_DESCS[currentCode] || "";
 
-      const forecastEl = document.getElementById('weather-forecast');
-      forecastEl.innerHTML = '';
+      const forecastEl = document.getElementById("weather-forecast");
+      forecastEl.innerHTML = "";
 
       for (let i = 1; i < Math.min(data.daily.time.length, 5); i++) {
         const date = new Date(data.daily.time[i]);
@@ -137,19 +234,19 @@
         const maxT = Math.round(data.daily.temperature_2m_max[i]);
         const minT = Math.round(data.daily.temperature_2m_min[i]);
 
-        const dayEl = document.createElement('div');
-        dayEl.className = 'forecast-day';
+        const dayEl = document.createElement("div");
+        dayEl.className = "forecast-day";
         dayEl.innerHTML = `
           <span>${dayName}</span>
-          <span class="forecast-icon">${WEATHER_ICONS[code] || '🌡️'}</span>
+          <span class="forecast-icon">${WEATHER_ICONS[code] || "🌡️"}</span>
           <span class="forecast-temp">${maxT}°/${minT}°</span>
         `;
         forecastEl.appendChild(dayEl);
       }
     } catch (err) {
-      console.warn('Weather fetch failed:', err);
-      document.getElementById('weather-icon').textContent = '🌡️';
-      document.getElementById('weather-temp').textContent = '--°C';
+      console.warn("Weather fetch failed:", err);
+      document.getElementById("weather-icon").textContent = "🌡️";
+      document.getElementById("weather-temp").textContent = "--°C";
     }
 
     setTimeout(initWeather, 15 * 60 * 1000);
@@ -158,30 +255,31 @@
   // ---- Carousel ----
   function initCarousel() {
     loadData();
-    const container = document.getElementById('carousel-slides');
-    const dotsContainer = document.getElementById('carousel-dots');
+    const container = document.getElementById("carousel-slides");
+    const dotsContainer = document.getElementById("carousel-dots");
 
     if (!container) return;
-    container.innerHTML = '';
-    dotsContainer.innerHTML = '';
+    container.innerHTML = "";
+    dotsContainer.innerHTML = "";
 
     if (slides.length === 0) {
-      container.innerHTML = '<div class="carousel-slide active" style="display:flex;align-items:center;justify-content:center;"><p style="color:var(--text-muted);font-size:1.2rem;">No slides configured. Add slides from the admin panel.</p></div>';
+      container.innerHTML =
+        '<div class="carousel-slide active" style="display:flex;align-items:center;justify-content:center;"><p style="color:var(--text-muted);font-size:1.2rem;">No slides configured. Add slides from the admin panel.</p></div>';
       return;
     }
 
     slides.forEach((slide, i) => {
-      const slideEl = document.createElement('div');
-      slideEl.className = `carousel-slide ${i === 0 ? 'active' : ''}`;
+      const slideEl = document.createElement("div");
+      slideEl.className = `carousel-slide ${i === 0 ? "active" : ""}`;
       slideEl.innerHTML = `
         <img src="${slide.url}" alt="Slide ${i + 1}" onerror="this.style.display='none'">
-        ${slide.caption ? `<div class="carousel-caption">${slide.caption}</div>` : ''}
+        ${slide.caption ? `<div class="carousel-caption">${slide.caption}</div>` : ""}
       `;
       container.appendChild(slideEl);
 
-      const dot = document.createElement('div');
-      dot.className = `carousel-dot ${i === 0 ? 'active' : ''}`;
-      dot.addEventListener('click', () => goToSlide(i));
+      const dot = document.createElement("div");
+      dot.className = `carousel-dot ${i === 0 ? "active" : ""}`;
+      dot.addEventListener("click", () => goToSlide(i));
       dotsContainer.appendChild(dot);
     });
 
@@ -190,15 +288,16 @@
   }
 
   function goToSlide(index) {
-    const allSlides = document.querySelectorAll('.carousel-slide');
-    const allDots = document.querySelectorAll('.carousel-dot');
+    const allSlides = document.querySelectorAll(".carousel-slide");
+    const allDots = document.querySelectorAll(".carousel-dot");
 
-    allSlides.forEach(s => s.classList.remove('active'));
-    allDots.forEach(d => d.classList.remove('active'));
+    allSlides.forEach((s) => s.classList.remove("active"));
+    allDots.forEach((d) => d.classList.remove("active"));
 
     currentSlide = index;
-    if (allSlides[currentSlide]) allSlides[currentSlide].classList.add('active');
-    if (allDots[currentSlide]) allDots[currentSlide].classList.add('active');
+    if (allSlides[currentSlide])
+      allSlides[currentSlide].classList.add("active");
+    if (allDots[currentSlide]) allDots[currentSlide].classList.add("active");
 
     resetCarouselTimer();
   }
@@ -221,23 +320,23 @@
 
   // ---- Status Updates (side panel, cycling) ----
   function initStatusUpdates() {
-    const messageEl = document.getElementById('status-message');
-    const dotsEl = document.getElementById('status-dots');
+    const messageEl = document.getElementById("status-message");
+    const dotsEl = document.getElementById("status-dots");
     if (!messageEl || !dotsEl) return;
 
     const updates = getStatusUpdates();
 
     if (updates.length === 0) {
-      messageEl.textContent = 'No status updates';
-      dotsEl.innerHTML = '';
+      messageEl.textContent = "No status updates";
+      dotsEl.innerHTML = "";
       return;
     }
 
     // Build dots
-    dotsEl.innerHTML = '';
+    dotsEl.innerHTML = "";
     updates.forEach((_, i) => {
-      const dot = document.createElement('div');
-      dot.className = `status-dot ${i === 0 ? 'active' : ''}`;
+      const dot = document.createElement("div");
+      dot.className = `status-dot ${i === 0 ? "active" : ""}`;
       dotsEl.appendChild(dot);
     });
 
@@ -250,16 +349,16 @@
     if (updates.length > 1) {
       statusTimer = setInterval(() => {
         // Fade out
-        messageEl.classList.add('fade-out');
+        messageEl.classList.add("fade-out");
 
         setTimeout(() => {
           currentStatus = (currentStatus + 1) % updates.length;
           messageEl.textContent = updates[currentStatus];
-          messageEl.classList.remove('fade-out');
+          messageEl.classList.remove("fade-out");
 
           // Update dots
-          dotsEl.querySelectorAll('.status-dot').forEach((d, i) => {
-            d.classList.toggle('active', i === currentStatus);
+          dotsEl.querySelectorAll(".status-dot").forEach((d, i) => {
+            d.classList.toggle("active", i === currentStatus);
           });
         }, 500);
       }, 10000);
@@ -268,7 +367,7 @@
 
   // ---- Events (side panel) ----
   function initEvents() {
-    const listEl = document.getElementById('events-list');
+    const listEl = document.getElementById("events-list");
     if (!listEl) return;
 
     const events = getEvents();
@@ -278,27 +377,27 @@
     today.setHours(0, 0, 0, 0);
 
     const upcoming = events
-      .filter(e => {
+      .filter((e) => {
         const d = new Date(e.date);
         return d >= today;
       })
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    listEl.innerHTML = '';
+    listEl.innerHTML = "";
 
     if (upcoming.length === 0) {
       listEl.innerHTML = '<div class="event-empty">No upcoming events</div>';
       return;
     }
 
-    upcoming.forEach(event => {
+    upcoming.forEach((event) => {
       const d = new Date(event.date);
       const dayNum = d.getDate();
       const monthStr = MONTH_SHORT[d.getMonth()];
 
-      const item = document.createElement('div');
-      item.className = 'event-item';
-      let qrHtml = '';
+      const item = document.createElement("div");
+      item.className = "event-item";
+      let qrHtml = "";
       if (event.link) {
         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(event.link)}&color=000000&bgcolor=ffffff`;
         qrHtml = `
@@ -315,7 +414,7 @@
         </div>
         <div class="event-details">
           <div class="event-name">${event.name}</div>
-          ${event.time ? `<div class="event-time">${event.time}</div>` : ''}
+          ${event.time ? `<div class="event-time">${event.time}</div>` : ""}
         </div>
         ${qrHtml}
       `;
@@ -325,18 +424,19 @@
 
   // ---- News Ticker (BBC only now) ----
   async function initTicker() {
-    const trackEl = document.getElementById('ticker-track');
+    const trackEl = document.getElementById("ticker-track");
     if (!trackEl) return;
 
     let headlines = [];
 
     // Fetch BBC News if enabled
     if (isBBCEnabled()) {
-      const bbcFeedUrl = 'https://feeds.bbci.co.uk/news/rss.xml';
+      const bbcFeedUrl = "https://feeds.bbci.co.uk/news/rss.xml";
       const proxies = [
-        'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(bbcFeedUrl),
-        'https://api.allorigins.win/raw?url=' + encodeURIComponent(bbcFeedUrl),
-        'https://corsproxy.io/?' + encodeURIComponent(bbcFeedUrl)
+        "https://api.codetabs.com/v1/proxy/?quest=" +
+          encodeURIComponent(bbcFeedUrl),
+        "https://api.allorigins.win/raw?url=" + encodeURIComponent(bbcFeedUrl),
+        "https://corsproxy.io/?" + encodeURIComponent(bbcFeedUrl),
       ];
 
       let fetched = false;
@@ -345,24 +445,24 @@
           const res = await fetch(proxyUrl);
           if (!res.ok) continue;
           const text = await res.text();
-          if (!text.includes('<item>') && !text.includes('<item ')) continue;
+          if (!text.includes("<item>") && !text.includes("<item ")) continue;
 
           const parser = new DOMParser();
-          const xml = parser.parseFromString(text, 'text/xml');
-          const items = xml.querySelectorAll('item');
+          const xml = parser.parseFromString(text, "text/xml");
+          const items = xml.querySelectorAll("item");
           let count = 0;
 
-          items.forEach(item => {
+          items.forEach((item) => {
             if (count >= 12) return;
-            const title = item.querySelector('title');
-            const desc = item.querySelector('description');
+            const title = item.querySelector("title");
+            const desc = item.querySelector("description");
             if (title && title.textContent) {
               let text = title.textContent.trim();
               // Add description for a brief overview instead of just the headline
               if (desc && desc.textContent) {
                 const descText = desc.textContent.trim();
                 if (descText && descText !== text) {
-                  text += ' — ' + descText;
+                  text += " — " + descText;
                 }
               }
               headlines.push(text);
@@ -372,25 +472,27 @@
           fetched = true;
           break;
         } catch (err) {
-          console.warn('Proxy failed:', proxyUrl, err);
+          console.warn("Proxy failed:", proxyUrl, err);
         }
       }
 
       if (!fetched) {
-        headlines.push('BBC News feed temporarily unavailable — check back shortly');
+        headlines.push(
+          "BBC News feed temporarily unavailable — check back shortly",
+        );
       }
     } else {
-      headlines.push('BBC News feed is disabled');
+      headlines.push("BBC News feed is disabled");
     }
 
     // Build ticker track (duplicate for seamless loop)
-    trackEl.innerHTML = '';
+    trackEl.innerHTML = "";
     const fragment = document.createDocumentFragment();
 
     for (let copy = 0; copy < 2; copy++) {
-      headlines.forEach(h => {
-        const item = document.createElement('span');
-        item.className = 'ticker-item';
+      headlines.forEach((h) => {
+        const item = document.createElement("span");
+        item.className = "ticker-item";
         item.textContent = h;
         fragment.appendChild(item);
       });
@@ -400,13 +502,13 @@
 
     const totalItems = headlines.length;
     const duration = Math.max(60, totalItems * 12);
-    trackEl.style.setProperty('--ticker-duration', `${duration}s`);
+    trackEl.style.setProperty("--ticker-duration", `${duration}s`);
 
     setTimeout(initTicker, 5 * 60 * 1000);
   }
 
   // ---- Init ----
-  document.addEventListener('DOMContentLoaded', async () => {
+  document.addEventListener("DOMContentLoaded", async () => {
     await loadData();
     initClock();
     initWeather();
@@ -418,5 +520,4 @@
     // The TV should reload entirely every 30 minutes to pick up code/data updates cleanly
     setInterval(() => location.reload(), 30 * 60 * 1000);
   });
-
 })();
