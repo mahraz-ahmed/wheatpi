@@ -60,7 +60,7 @@
       },
     ],
     bbcEnabled: true,
-    carouselInterval: 7000,
+    carouselInterval: 5000,
   };
 
   // ---- Weather code mapping ----
