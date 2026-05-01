@@ -179,7 +179,8 @@ html, body {
 
 /* Events Panel */
 .events-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-.events-list { flex: 1; overflow-y: hidden; }
+.events-list { flex: 1; overflow-y: hidden; display: flex; flex-direction: column; }
+.event-empty { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 1.2rem; }
 .event-item { 
   display: flex; 
   align-items: stretch; 
