@@ -209,7 +209,8 @@
 
   // ---- Weather ----
   async function initWeather() {
-    const url = `/api/weather`;
+    // Hardcoded to Strand, London
+    const url = "https://api.open-meteo.com/v1/forecast?latitude=51.5113&longitude=-0.1160&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Europe%2FLondon";
 
     try {
       const res = await fetch(url);
