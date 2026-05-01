@@ -580,5 +580,19 @@
 
     // The TV should reload entirely every 30 minutes to pick up code/data updates cleanly
     setInterval(() => location.reload(), 30 * 60 * 1000);
+
+    // Live-sync polling every 60 seconds
+    setInterval(async () => {
+      const oldDataStr = JSON.stringify(remoteData);
+      await loadData();
+      const newDataStr = JSON.stringify(remoteData);
+      
+      if (oldDataStr !== newDataStr) {
+        // Softly re-initialize components with the live data
+        initCarousel();
+        initStatusUpdates();
+        initEvents();
+      }
+    }, 60 * 1000);
   });
 })();

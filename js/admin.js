@@ -207,13 +207,20 @@
 
     const username = document.getElementById("login-username").value.trim();
     const password = document.getElementById("login-password").value;
+    const rememberMe = document.getElementById("login-remember")?.checked;
     const errorEl = document.getElementById("login-error");
     const creds = getCredentials();
 
     if (username === creds.username && password === creds.password) {
       isLoggedIn = true;
       errorEl.classList.remove("show");
-      sessionStorage.setItem("wheatstone_admin_session", "true");
+      
+      if (rememberMe) {
+        localStorage.setItem("wheatstone_admin_session", "true");
+      } else {
+        sessionStorage.setItem("wheatstone_admin_session", "true");
+      }
+      
       showAdminDashboard();
     } else {
       errorEl.textContent = "Invalid username or password";
@@ -224,6 +231,7 @@
   function handleLogout() {
     isLoggedIn = false;
     sessionStorage.removeItem("wheatstone_admin_session");
+    localStorage.removeItem("wheatstone_admin_session");
     document.getElementById("login-section").style.display = "";
     document.getElementById("admin-dashboard").classList.remove("active");
   }
@@ -603,7 +611,7 @@
     await loadRemoteData();
 
     // Check for existing session
-    if (sessionStorage.getItem("wheatstone_admin_session") === "true") {
+    if (sessionStorage.getItem("wheatstone_admin_session") === "true" || localStorage.getItem("wheatstone_admin_session") === "true") {
       isLoggedIn = true;
       showAdminDashboard();
     }
@@ -748,7 +756,7 @@
     const viewDashBtn = document.getElementById("view-dashboard-btn");
     if (viewDashBtn)
       viewDashBtn.addEventListener("click", () =>
-        window.open("index.html", "_blank"),
+        window.open("/", "_blank"),
       );
   });
 })();
