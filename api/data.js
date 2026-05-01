@@ -64,7 +64,7 @@ const DEFAULTS = {
     },
   ],
   bbcEnabled: true,
-  carouselInterval: 5000,
+  carouselInterval: 7000,
   credentials: {
     username: "admin",
     password: "password123",
