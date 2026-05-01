@@ -172,13 +172,6 @@
     saveRemoteData();
   }
 
-  function getCloudinary() {
-    return remoteData?.cloudinary || { cloudName: "", uploadPreset: "" };
-  }
-  function setCloudinary(cloudName, uploadPreset) {
-    remoteData.cloudinary = { cloudName, uploadPreset };
-    saveRemoteData();
-  }
 
   // ---- Toast notifications ----
   function showToast(message, type = "success") {
@@ -309,12 +302,18 @@
     const urlInput = document.getElementById("new-slide-url");
     const captionInput = document.getElementById("new-slide-caption");
 
-    const url = urlInput.value.trim();
+    let url = urlInput.value.trim();
     const caption = captionInput.value.trim();
 
     if (!url) {
-      showToast("Please enter an image URL", "error");
+      showToast("Please enter a Google Drive link", "error");
       return;
+    }
+
+    // Convert Google Drive share link to direct image link
+    const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (driveMatch && driveMatch[1]) {
+      url = `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
     }
 
     const slides = getSlides();
@@ -506,19 +505,14 @@
     const creds = getCredentials();
     const carouselInterval = getCarouselInterval();
     const statusInterval = getStatusInterval();
-    const cloudinary = getCloudinary();
-
     document.getElementById("settings-username").value = creds.username;
     document.getElementById("settings-password").value = "";
-    document.getElementById("settings-interval").value = carouselInterval / 1000;
-    
+    document.getElementById("settings-interval").value =
+      carouselInterval / 1000;
+
     if (document.getElementById("settings-status-interval")) {
-      document.getElementById("settings-status-interval").value = statusInterval / 1000;
-    }
-    
-    if (document.getElementById("settings-cloudinary-cloud")) {
-      document.getElementById("settings-cloudinary-cloud").value = cloudinary.cloudName || "";
-      document.getElementById("settings-cloudinary-preset").value = cloudinary.uploadPreset || "";
+      document.getElementById("settings-status-interval").value =
+        statusInterval / 1000;
     }
   }
 
@@ -529,11 +523,12 @@
     const password = document.getElementById("settings-password").value;
     const intervalEl = document.getElementById("settings-interval");
     const carouselInterval = parseFloat(intervalEl.value);
-    const statusIntervalEl = document.getElementById("settings-status-interval");
-    const statusInterval = statusIntervalEl ? parseFloat(statusIntervalEl.value) : 5;
-
-    const cloudName = document.getElementById("settings-cloudinary-cloud")?.value.trim() || "";
-    const uploadPreset = document.getElementById("settings-cloudinary-preset")?.value.trim() || "";
+    const statusIntervalEl = document.getElementById(
+      "settings-status-interval",
+    );
+    const statusInterval = statusIntervalEl
+      ? parseFloat(statusIntervalEl.value)
+      : 5;
 
     if (username) {
       const creds = getCredentials();
@@ -547,8 +542,6 @@
     if (!isNaN(statusInterval) && statusInterval >= 1) {
       setStatusInterval(Math.round(statusInterval * 1000));
     }
-
-    setCloudinary(cloudName, uploadPreset);
 
     showToast("Settings saved");
     loadSettings();
@@ -573,10 +566,14 @@
 
   // ---- Image preview on URL input ----
   function handleSlideUrlPreview() {
-    const url = document.getElementById("new-slide-url").value.trim();
+    let url = document.getElementById("new-slide-url").value.trim();
     const preview = document.getElementById("slide-preview-img");
 
     if (url) {
+      const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if (driveMatch && driveMatch[1]) {
+        url = `https://drive.google.com/uc?export=view&id=${driveMatch[1]}`;
+      }
       preview.src = url;
       preview.classList.add("show");
       preview.onerror = () => preview.classList.remove("show");
@@ -608,117 +605,7 @@
       btn.addEventListener("click", () => switchSection(btn.dataset.section));
     });
 
-    // Drag and Drop
-    const dropzone = document.getElementById("slide-dropzone");
-    const fileInput = document.getElementById("new-slide-file");
-    const urlInput = document.getElementById("new-slide-url");
 
-    if (dropzone && fileInput) {
-      dropzone.addEventListener("click", () => fileInput.click());
-
-      dropzone.addEventListener("dragover", (e) => {
-        e.preventDefault();
-        dropzone.classList.add("dragover");
-      });
-
-      dropzone.addEventListener("dragleave", () => {
-        dropzone.classList.remove("dragover");
-      });
-
-      dropzone.addEventListener("drop", (e) => {
-        e.preventDefault();
-        dropzone.classList.remove("dragover");
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-          handleFile(e.dataTransfer.files[0]);
-        }
-      });
-
-      fileInput.addEventListener("change", (e) => {
-        if (e.target.files && e.target.files[0]) {
-          handleFile(e.target.files[0]);
-        }
-      });
-
-      function handleFile(file) {
-        if (!file.type.startsWith("image/")) {
-          showToast("Please upload an image file", "error");
-          return;
-        }
-
-        const cloudinaryCfg = getCloudinary();
-        if (cloudinaryCfg && cloudinaryCfg.cloudName && cloudinaryCfg.uploadPreset) {
-          showToast("Uploading to Cloudinary...", "success");
-          
-          const formData = new FormData();
-          formData.append("file", file);
-          formData.append("upload_preset", cloudinaryCfg.uploadPreset);
-
-          fetch(`https://api.cloudinary.com/v1_1/${cloudinaryCfg.cloudName}/image/upload`, {
-            method: "POST",
-            body: formData,
-          })
-          .then(res => res.json())
-          .then(data => {
-            if (data.secure_url) {
-              urlInput.value = data.secure_url;
-              const event = new Event("input", { bubbles: true });
-              urlInput.dispatchEvent(event);
-              showToast("Uploaded to Cloudinary!");
-            } else {
-              throw new Error(data.error?.message || "Upload failed");
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            showToast("Cloudinary upload failed", "error");
-          });
-          
-          return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement("canvas");
-            let width = img.width;
-            let height = img.height;
-            const MAX_WIDTH = 1920;
-            const MAX_HEIGHT = 1080;
-
-            if (width > height) {
-              if (width > MAX_WIDTH) {
-                height *= MAX_WIDTH / width;
-                width = MAX_WIDTH;
-              }
-            } else {
-              if (height > MAX_HEIGHT) {
-                width *= MAX_HEIGHT / height;
-                height = MAX_HEIGHT;
-              }
-            }
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, width, height);
-
-            const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
-            
-            if (dataUrl.length > 500000) {
-              showToast("Image is still too large. Please configure Cloudinary.", "error");
-              return;
-            }
-
-            urlInput.value = dataUrl;
-            const event = new Event("input", { bubbles: true });
-            urlInput.dispatchEvent(event);
-            showToast("Image compressed and loaded");
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
-    }
 
     // Add slide
     const addSlideBtn = document.getElementById("add-slide-btn");
