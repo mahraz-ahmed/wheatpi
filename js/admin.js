@@ -64,6 +64,7 @@
     ],
     bbcEnabled: true,
     carouselInterval: 5000,
+    statusInterval: 5000,
   };
 
   // ---- State ----
@@ -160,6 +161,14 @@
   }
   function setCarouselInterval(interval) {
     remoteData.carouselInterval = interval;
+    saveRemoteData();
+  }
+
+  function getStatusInterval() {
+    return remoteData?.statusInterval || DEFAULTS.statusInterval;
+  }
+  function setStatusInterval(interval) {
+    remoteData.statusInterval = interval;
     saveRemoteData();
   }
 
@@ -493,15 +502,19 @@
     showToast("Event added");
   }
 
-  // ---- Settings ----
   function loadSettings() {
     const creds = getCredentials();
-    const interval = getCarouselInterval();
+    const carouselInterval = getCarouselInterval();
+    const statusInterval = getStatusInterval();
     const cloudinary = getCloudinary();
 
     document.getElementById("settings-username").value = creds.username;
     document.getElementById("settings-password").value = "";
-    document.getElementById("settings-interval").value = interval / 1000;
+    document.getElementById("settings-interval").value = carouselInterval / 1000;
+    
+    if (document.getElementById("settings-status-interval")) {
+      document.getElementById("settings-status-interval").value = statusInterval / 1000;
+    }
     
     if (document.getElementById("settings-cloudinary-cloud")) {
       document.getElementById("settings-cloudinary-cloud").value = cloudinary.cloudName || "";
@@ -515,7 +528,9 @@
     const username = document.getElementById("settings-username").value.trim();
     const password = document.getElementById("settings-password").value;
     const intervalEl = document.getElementById("settings-interval");
-    const interval = parseFloat(intervalEl.value);
+    const carouselInterval = parseFloat(intervalEl.value);
+    const statusIntervalEl = document.getElementById("settings-status-interval");
+    const statusInterval = statusIntervalEl ? parseFloat(statusIntervalEl.value) : 5;
 
     const cloudName = document.getElementById("settings-cloudinary-cloud")?.value.trim() || "";
     const uploadPreset = document.getElementById("settings-cloudinary-preset")?.value.trim() || "";
@@ -526,8 +541,11 @@
       setCredentials(username, newPassword);
     }
 
-    if (!isNaN(interval) && interval >= 1) {
-      setCarouselInterval(Math.round(interval * 1000));
+    if (!isNaN(carouselInterval) && carouselInterval >= 1) {
+      setCarouselInterval(Math.round(carouselInterval * 1000));
+    }
+    if (!isNaN(statusInterval) && statusInterval >= 1) {
+      setStatusInterval(Math.round(statusInterval * 1000));
     }
 
     setCloudinary(cloudName, uploadPreset);
@@ -542,12 +560,8 @@
         "Are you sure you want to reset ALL settings to defaults? This cannot be undone.",
       )
     ) {
-      localStorage.removeItem("wheatstone_slides");
-      localStorage.removeItem("wheatstone_headlines");
-      localStorage.removeItem("wheatstone_events");
-      localStorage.removeItem("wheatstone_bbc_enabled");
-      localStorage.removeItem("wheatstone_carousel_interval");
-      localStorage.removeItem("wheatstone_credentials");
+      remoteData = JSON.parse(JSON.stringify(DEFAULTS));
+      saveRemoteData();
 
       loadCarouselEditor();
       loadHeadlinesEditor();

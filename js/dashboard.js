@@ -61,6 +61,7 @@
     ],
     bbcEnabled: true,
     carouselInterval: 5000,
+    statusInterval: 5000,
   };
 
   // ---- Weather code mapping ----
@@ -153,6 +154,7 @@
   let carouselTimer = null;
   let slides = [];
   let carouselInterval = DEFAULTS.carouselInterval;
+  let statusInterval = DEFAULTS.statusInterval;
   let currentStatus = 0;
   let statusTimer = null;
 
@@ -175,6 +177,7 @@
 
     slides = remoteData.slides || DEFAULTS.slides;
     carouselInterval = remoteData.carouselInterval || DEFAULTS.carouselInterval;
+    statusInterval = remoteData.statusInterval || DEFAULTS.statusInterval;
   }
 
   function getStatusUpdates() {
@@ -391,7 +394,7 @@
             d.classList.toggle("active", i === currentStatus);
           });
         }, 500);
-      }, 10000);
+      }, statusInterval);
     }
   }
 
