@@ -100,7 +100,7 @@
         try {
           const errData = await res.json();
           if (errData.error) errMsg = errData.error;
-        } catch (_) {}
+        } catch (_) { }
         throw new Error(errMsg);
       }
     } catch (e) {
@@ -214,13 +214,13 @@
     if (username === creds.username && password === creds.password) {
       isLoggedIn = true;
       errorEl.classList.remove("show");
-      
+
       if (rememberMe) {
         localStorage.setItem("wheatstone_admin_session", "true");
       } else {
         sessionStorage.setItem("wheatstone_admin_session", "true");
       }
-      
+
       showAdminDashboard();
     } else {
       errorEl.textContent = "Invalid username or password";
@@ -614,6 +614,11 @@
     if (sessionStorage.getItem("wheatstone_admin_session") === "true" || localStorage.getItem("wheatstone_admin_session") === "true") {
       isLoggedIn = true;
       showAdminDashboard();
+
+      // Notify the user if they were automatically logged in via Remember Me
+      if (localStorage.getItem("wheatstone_admin_session") === "true") {
+        showToast("Welcome back! You've been automatically logged in.");
+      }
     }
 
     // Login form
