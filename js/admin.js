@@ -757,11 +757,5 @@
     const resetBtn = document.getElementById("reset-all-btn");
     if (resetBtn) resetBtn.addEventListener("click", handleResetAll);
 
-    // View dashboard link
-    const viewDashBtn = document.getElementById("view-dashboard-btn");
-    if (viewDashBtn)
-      viewDashBtn.addEventListener("click", () =>
-        window.open("/", "_blank"),
-      );
   });
 })();
